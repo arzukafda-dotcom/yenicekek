@@ -1145,9 +1145,9 @@ const ProductDetailPage = ({ categories }) => {
     setLocationLoading(false);
   }, []);
 
-  // Arama efekti - önce statik sonra API
+  // Arama efekti - 4 harf yazılınca başla, önce statik sonra API
   useEffect(() => {
-    if (!showLocationDropdown || location.length < 2) {
+    if (!showLocationDropdown || location.length < 4) {
       setLocationResults([]);
       setLocationLoading(false);
       return;
