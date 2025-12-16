@@ -688,7 +688,7 @@ const AboutPage = () => (
       <h1 className="text-3xl font-bold text-gray-900 mb-6">Hakkımızda</h1>
       <div className="bg-white rounded-2xl shadow-sm p-8">
         <p className="text-gray-600 leading-relaxed mb-4">
-          ÇiçekZamanı, 2024 yılında kurulmuş online çiçek sipariş platformudur. 
+          Çiçekçi Burada, 2024 yılında kurulmuş online çiçek sipariş platformudur. 
           Türkiye'nin dört bir yanına aynı gün teslimat garantisi ile en taze çiçekleri ulaştırıyoruz.
         </p>
         <p className="text-gray-600 leading-relaxed mb-4">
