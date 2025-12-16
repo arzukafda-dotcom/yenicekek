@@ -896,41 +896,39 @@ const ProductDetailPage = ({ categories }) => {
   // Location search state - API ile gerçek arama
   const [locationResults, setLocationResults] = useState([]);
   const [locationLoading, setLocationLoading] = useState(false);
-  const locationSearchRef = useRef(null);
 
-  // Location search with Photon/Nominatim API
-  useEffect(() => {
-    if (locationSearchRef.current) {
-      clearTimeout(locationSearchRef.current);
-    }
-
-    if (location.length >= 2 && showLocationDropdown) {
-      setLocationLoading(true);
-      locationSearchRef.current = setTimeout(async () => {
-        try {
-          const res = await axios.get(`${API}/locations/search?q=${encodeURIComponent(location)}`);
-          if (res.data.results) {
-            setLocationResults(res.data.results);
-          } else {
-            setLocationResults([]);
-          }
-        } catch (e) {
-          console.error('Location search error:', e);
-          setLocationResults([]);
-        }
-        setLocationLoading(false);
-      }, 300); // 300ms debounce
-    } else {
+  // Location search with debounce
+  const searchLocation = useCallback(async (query) => {
+    if (query.length < 2) {
       setLocationResults([]);
       setLocationLoading(false);
+      return;
     }
+    
+    setLocationLoading(true);
+    try {
+      const res = await axios.get(`${API}/locations/search?q=${encodeURIComponent(query)}`);
+      setLocationResults(res.data?.results || []);
+    } catch (e) {
+      console.error('Location search error:', e);
+      setLocationResults([]);
+    } finally {
+      setLocationLoading(false);
+    }
+  }, []);
 
-    return () => {
-      if (locationSearchRef.current) {
-        clearTimeout(locationSearchRef.current);
+  // Debounced search effect
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (showLocationDropdown && location.length >= 2) {
+        searchLocation(location);
+      } else {
+        setLocationResults([]);
       }
-    };
-  }, [location, showLocationDropdown]);
+    }, 400);
+    
+    return () => clearTimeout(timer);
+  }, [location, showLocationDropdown, searchLocation]);
 
   const filteredLocations = locationResults;
 
