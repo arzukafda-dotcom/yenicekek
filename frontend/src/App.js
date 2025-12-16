@@ -144,29 +144,111 @@ const MainHeader = ({ onMenuToggle }) => {
 
 // ===== CATEGORY NAV BAR (Desktop Only) =====
 const CategoryNavBar = ({ categories }) => {
+  const [openMenu, setOpenMenu] = useState(null);
+  
   const mainCategories = [
-    { name: "ÇİÇEKLER", slug: "tumu", icon: "🌸" },
-    { name: "ORKİDE", slug: "orkide", icon: "🌸" },
-    { name: "GÜL", slug: "gul", icon: "🌹" },
-    { name: "TASARIM", slug: "tasarim", icon: "🎨" },
-    { name: "KOKİNA", slug: "kokina", icon: "🎄" },
-    { name: "ANTORYUM", slug: "antoryum", icon: "❤️" },
+    { name: "ÇİÇEKLER", slug: "tumu", icon: "🌸", hasDropdown: true },
+    { name: "DOĞUM GÜNÜ", slug: "dogum-gunu", icon: "🎂", hasDropdown: false },
+    { name: "SEVGİ & AŞK", slug: "sevgi-ask", icon: "❤️", hasDropdown: false },
+    { name: "PREMIUM ÇİÇEKLER", slug: "orkide", icon: "🌸", hasDropdown: false },
+    { name: "MEYVE ÇİÇEK", slug: "tasarim", icon: "🍎", hasDropdown: false },
+  ];
+
+  const amacaGore = [
+    { name: "Geçmiş Olsun", slug: "gecmis-olsun" },
+    { name: "Yeni İş / Terfi", slug: "yeni-is-terfi" },
+    { name: "Doğum / Yeni Bebek", slug: "dogum-yeni-bebek" },
+    { name: "Yıl Dönümü", slug: "yil-donumu" },
+    { name: "Tasarım Çiçekler", slug: "tasarim" },
+    { name: "Çiçek Buketleri", slug: "cicek-buketleri" },
+    { name: "Nikah / Düğün", slug: "nikah-dugun" },
+    { name: "Açılış / Kutlama", slug: "acilis-kutlama" },
+    { name: "Cenaze Çelenkleri", slug: "celenk" },
+    { name: "Ferforje", slug: "ferforje" },
+    { name: "Çelenk", slug: "celenk" },
+  ];
+
+  const uruneGore = [
+    { name: "Orkide", slug: "orkide" },
+    { name: "Gül", slug: "gul" },
+    { name: "Papatya / Gerbera", slug: "papatya-gerbera" },
+    { name: "Saksı Çiçekleri", slug: "saksi-cicekleri" },
+    { name: "Lilyum", slug: "lilyum" },
+    { name: "Ayçiçeği", slug: "aycicegi" },
+    { name: "Hüsnüyusuf", slug: "husnuyusuf" },
+    { name: "Karanfil", slug: "karanfil" },
+    { name: "Antoryum", slug: "antoryum" },
+    { name: "Kokina", slug: "kokina" },
   ];
 
   return (
-    <div className="hidden md:block bg-green-500 text-white">
+    <div className="hidden md:block bg-green-500 text-white relative">
       <div className="w-full px-4">
-        <nav className="flex items-center gap-2 py-3">
-          {mainCategories.map((cat) => (
-            <Link
+        <nav className="flex items-center gap-1 py-2">
+          {mainCategories.map((cat, idx) => (
+            <div 
               key={cat.slug}
-              to={`/kategori/${cat.slug}`}
-              className="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-green-600 transition-colors font-semibold text-sm whitespace-nowrap"
-              data-testid={`nav-category-${cat.slug}`}
+              className="relative"
+              onMouseEnter={() => cat.hasDropdown && setOpenMenu(idx)}
+              onMouseLeave={() => setOpenMenu(null)}
             >
-              <span className="text-lg">{cat.icon}</span>
-              <span>{cat.name}</span>
-            </Link>
+              <Link
+                to={`/kategori/${cat.slug}`}
+                className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors font-semibold text-sm whitespace-nowrap ${
+                  idx === 0 ? 'text-green-500 bg-white' : 'hover:bg-green-600'
+                }`}
+                data-testid={`nav-category-${cat.slug}`}
+              >
+                <span className="text-lg">{cat.icon}</span>
+                <span>{cat.name}</span>
+              </Link>
+              
+              {/* Mega Dropdown */}
+              {cat.hasDropdown && openMenu === idx && (
+                <div 
+                  className="absolute top-full left-0 bg-white text-gray-800 shadow-xl rounded-b-lg py-6 px-8 z-50 min-w-[600px]"
+                  style={{ marginTop: '0px' }}
+                >
+                  <div className="grid grid-cols-2 gap-8">
+                    {/* AMACA GÖRE */}
+                    <div>
+                      <h4 className="font-bold text-gray-900 mb-3 text-sm uppercase tracking-wide">AMACA GÖRE</h4>
+                      <ul className="space-y-2">
+                        {amacaGore.map((item) => (
+                          <li key={item.slug}>
+                            <Link 
+                              to={`/kategori/${item.slug}`}
+                              className="text-gray-600 hover:text-green-600 text-sm block py-1"
+                              onClick={() => setOpenMenu(null)}
+                            >
+                              {item.name}
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                    
+                    {/* ÜRÜNE GÖRE */}
+                    <div>
+                      <h4 className="font-bold text-gray-900 mb-3 text-sm uppercase tracking-wide">ÜRÜNE GÖRE</h4>
+                      <ul className="space-y-2">
+                        {uruneGore.map((item) => (
+                          <li key={item.slug}>
+                            <Link 
+                              to={`/kategori/${item.slug}`}
+                              className="text-gray-600 hover:text-green-600 text-sm block py-1"
+                              onClick={() => setOpenMenu(null)}
+                            >
+                              {item.name}
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
           ))}
         </nav>
       </div>
