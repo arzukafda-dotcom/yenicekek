@@ -893,21 +893,52 @@ const ProductDetailPage = ({ categories }) => {
   
   const timeSlots = ['09:00 - 12:00', '12:00 - 15:00', '15:00 - 18:00', '18:00 - 21:00'];
   
-  // Sample locations for autocomplete
-  const sampleLocations = [
-    "Bağlar Mahallesi, Bağcılar/İstanbul",
-    "Bahçelievler Mahallesi, Bahçelievler/İstanbul",
-    "Beşiktaş Merkez, Beşiktaş/İstanbul",
-    "Kadıköy Merkez, Kadıköy/İstanbul",
-    "Ümraniye Merkez, Ümraniye/İstanbul",
-    "Maltepe Merkez, Maltepe/İstanbul",
-    "Pendik Merkez, Pendik/İstanbul",
-    "Şişli Merkez, Şişli/İstanbul",
-  ];
-  
-  const filteredLocations = location.length >= 3 
-    ? sampleLocations.filter(loc => loc.toLowerCase().includes(location.toLowerCase()))
-    : [];
+  // Location search state
+  const [locationResults, setLocationResults] = useState([]);
+  const [locationLoading, setLocationLoading] = useState(false);
+  const searchTimeoutRef = useRef(null);
+
+  // Location search function
+  const searchLocations = useCallback(async (query) => {
+    if (query.length < 2) {
+      setLocationResults([]);
+      return;
+    }
+    
+    setLocationLoading(true);
+    try {
+      const res = await axios.get(`${API}/locations/search?q=${encodeURIComponent(query)}`);
+      setLocationResults(res.data.results || []);
+    } catch (e) {
+      console.error('Location search error:', e);
+      setLocationResults([]);
+    } finally {
+      setLocationLoading(false);
+    }
+  }, []);
+
+  // Debounced location search
+  useEffect(() => {
+    if (searchTimeoutRef.current) {
+      clearTimeout(searchTimeoutRef.current);
+    }
+    
+    if (location.length >= 2 && showLocationDropdown) {
+      searchTimeoutRef.current = setTimeout(() => {
+        searchLocations(location);
+      }, 300);
+    } else {
+      setLocationResults([]);
+    }
+    
+    return () => {
+      if (searchTimeoutRef.current) {
+        clearTimeout(searchTimeoutRef.current);
+      }
+    };
+  }, [location, showLocationDropdown, searchLocations]);
+
+  const filteredLocations = locationResults;
 
   // Calendar rendering
   const renderCalendar = () => {
