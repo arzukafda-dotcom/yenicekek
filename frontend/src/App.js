@@ -846,10 +846,32 @@ const CategoryPage = ({ categories }) => {
 };
 
 // ===== PRODUCT DETAIL PAGE =====
-const ProductDetailPage = ({ products, categories }) => {
+const ProductDetailPage = ({ categories }) => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const product = products.find(p => p.id === id);
+  const [product, setProduct] = useState(null);
+  const [relatedProducts, setRelatedProducts] = useState([]);
+  const [loadingProduct, setLoadingProduct] = useState(true);
+
+  useEffect(() => {
+    const fetchProduct = async () => {
+      try {
+        setLoadingProduct(true);
+        const res = await axios.get(`${API}/products/${id}`);
+        setProduct(res.data);
+        
+        // Fetch related products (bestsellers)
+        const relatedRes = await axios.get(`${API}/products?page=1&per_page=6&bestseller=true`);
+        setRelatedProducts(relatedRes.data.products.filter(p => p.id !== id));
+      } catch (e) {
+        console.error('Error fetching product:', e);
+        setProduct(null);
+      } finally {
+        setLoadingProduct(false);
+      }
+    };
+    fetchProduct();
+  }, [id]);
   
   // State for shipping
   const [location, setLocation] = useState("");
