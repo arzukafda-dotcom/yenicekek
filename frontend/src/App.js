@@ -18,8 +18,8 @@ const Logo = () => (
       </svg>
     </div>
     <span className="text-2xl font-bold">
-      <span className="text-pink-500">Çiçek</span>
-      <span className="text-green-600">Zamanı</span>
+      <span className="text-pink-500">Çiçekçi</span>
+      <span className="text-green-600">Burada</span>
     </span>
   </Link>
 );
