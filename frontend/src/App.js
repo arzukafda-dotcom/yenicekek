@@ -1217,7 +1217,7 @@ const SearchResultsPage = () => {
     <div className="bg-gray-50 min-h-screen" data-testid="search-results-page">
       <div className="w-full px-4 py-8">
         <h1 className="text-2xl font-bold text-gray-900 mb-2">
-          "{query}" için arama sonuçları
+          &ldquo;{query}&rdquo; için arama sonuçları
         </h1>
         <p className="text-gray-500 mb-6">{results.length} ürün bulundu</p>
         
