@@ -592,20 +592,114 @@ const CategoryPage = ({ products, categories }) => {
 };
 
 // ===== PRODUCT DETAIL PAGE =====
-const ProductDetailPage = ({ products }) => {
+const ProductDetailPage = ({ products, categories }) => {
   const { id } = useParams();
   const navigate = useNavigate();
   const product = products.find(p => p.id === id);
+  
+  // State for shipping
+  const [location, setLocation] = useState("");
+  const [showLocationDropdown, setShowLocationDropdown] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedTime, setSelectedTime] = useState(null);
+  const [showCalendar, setShowCalendar] = useState(false);
+  const [calendarMonth, setCalendarMonth] = useState(new Date());
+  
+  // Get category info
+  const category = product ? categories.find(c => c.slug === product.category) : null;
+
+  // Date helpers
+  const today = new Date();
+  const tomorrow = new Date(today); tomorrow.setDate(today.getDate() + 1);
+  const dayAfter = new Date(today); dayAfter.setDate(today.getDate() + 2);
+  
+  const formatDate = (d, opts) => d.toLocaleDateString('tr-TR', opts);
+  
+  const timeSlots = ['09:00 - 12:00', '12:00 - 15:00', '15:00 - 18:00', '18:00 - 21:00'];
+  
+  // Sample locations for autocomplete
+  const sampleLocations = [
+    "Bağlar Mahallesi, Bağcılar/İstanbul",
+    "Bahçelievler Mahallesi, Bahçelievler/İstanbul",
+    "Beşiktaş Merkez, Beşiktaş/İstanbul",
+    "Kadıköy Merkez, Kadıköy/İstanbul",
+    "Ümraniye Merkez, Ümraniye/İstanbul",
+    "Maltepe Merkez, Maltepe/İstanbul",
+    "Pendik Merkez, Pendik/İstanbul",
+    "Şişli Merkez, Şişli/İstanbul",
+  ];
+  
+  const filteredLocations = location.length >= 3 
+    ? sampleLocations.filter(loc => loc.toLowerCase().includes(location.toLowerCase()))
+    : [];
+
+  // Calendar rendering
+  const renderCalendar = () => {
+    const year = calendarMonth.getFullYear();
+    const month = calendarMonth.getMonth();
+    const firstDay = new Date(year, month, 1);
+    const lastDay = new Date(year, month + 1, 0);
+    const startPad = (firstDay.getDay() + 6) % 7;
+    const days = [];
+    
+    // Day headers
+    const dayNames = ['Pt', 'Sa', 'Ça', 'Pe', 'Cu', 'Ct', 'Pz'];
+    
+    // Empty cells before first day
+    for (let i = 0; i < startPad; i++) {
+      days.push(<div key={`empty-${i}`} className="w-8 h-8" />);
+    }
+    
+    // Days of month
+    for (let d = 1; d <= lastDay.getDate(); d++) {
+      const date = new Date(year, month, d);
+      const isPast = date < new Date(today.toDateString());
+      const isSelected = selectedDate && date.toDateString() === selectedDate.toDateString();
+      
+      days.push(
+        <button
+          key={d}
+          disabled={isPast}
+          onClick={() => { setSelectedDate(date); setShowCalendar(false); }}
+          className={`w-8 h-8 rounded-full text-sm font-medium transition-colors ${
+            isPast ? 'text-gray-300 cursor-not-allowed' :
+            isSelected ? 'bg-green-500 text-white' :
+            'text-gray-700 hover:bg-green-100'
+          }`}
+        >
+          {d}
+        </button>
+      );
+    }
+    
+    return (
+      <div className="bg-white rounded-lg shadow-xl p-4 absolute top-full left-0 right-0 mt-2 z-20">
+        <div className="flex items-center justify-between mb-3">
+          <button onClick={() => setCalendarMonth(new Date(year, month - 1))} className="p-1 hover:bg-gray-100 rounded">‹</button>
+          <span className="font-semibold">{formatDate(calendarMonth, { month: 'long', year: 'numeric' })}</span>
+          <button onClick={() => setCalendarMonth(new Date(year, month + 1))} className="p-1 hover:bg-gray-100 rounded">›</button>
+        </div>
+        <div className="grid grid-cols-7 gap-1 mb-2">
+          {dayNames.map(dn => <div key={dn} className="w-8 h-6 text-xs text-gray-500 font-medium flex items-center justify-center">{dn}</div>)}
+        </div>
+        <div className="grid grid-cols-7 gap-1">{days}</div>
+      </div>
+    );
+  };
+
+  const handleOrder = () => {
+    if (!location.trim()) return alert('Lütfen gönderim yerini seçiniz.');
+    if (!selectedDate) return alert('Lütfen tarih seçiniz.');
+    if (!selectedTime) return alert('Lütfen saat aralığı seçiniz.');
+    alert(`Sipariş oluşturuldu!\n\nÜrün: ${product.title}\nKonum: ${location}\nTarih: ${formatDate(selectedDate, { day: '2-digit', month: 'long', year: 'numeric' })}\nSaat: ${selectedTime}\nTutar: ${product.price},00 TL`);
+  };
 
   if (!product) {
     return (
-      <div className="max-w-7xl mx-auto px-4 py-12 text-center" data-testid="product-not-found">
+      <div className="w-full px-4 py-12 text-center" data-testid="product-not-found">
         <h1 className="text-2xl font-bold text-gray-900 mb-4">Ürün Bulunamadı</h1>
         <p className="text-gray-500 mb-6">Aradığınız ürün mevcut değil.</p>
-        <button 
-          onClick={() => navigate('/')}
-          className="bg-green-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-600 transition-colors"
-        >
+        <button onClick={() => navigate('/')} className="bg-green-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-600 transition-colors">
           Ana Sayfaya Dön
         </button>
       </div>
@@ -614,67 +708,185 @@ const ProductDetailPage = ({ products }) => {
 
   return (
     <div className="bg-gray-50 min-h-screen" data-testid="product-detail-page">
-      <div className="max-w-7xl mx-auto px-4 py-8">
-        <button 
-          onClick={() => navigate(-1)}
-          className="flex items-center gap-2 text-gray-500 hover:text-green-600 mb-6 bg-transparent border-0 cursor-pointer text-sm font-medium"
-        >
-          <svg viewBox="0 0 24 24" className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M15 18l-6-6 6-6"/>
-          </svg>
+      {/* Detail Header */}
+      <div className="bg-green-500 text-white px-4 py-3 flex items-center justify-between md:hidden">
+        <button onClick={() => navigate(-1)} className="p-2" data-testid="detail-back-btn">
+          <svg viewBox="0 0 24 24" className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2"><path d="M15 18l-6-6 6-6"/></svg>
+        </button>
+        <span className="font-semibold">Çiçekçi Burada</span>
+        <button className="p-2"><SearchIcon className="w-6 h-6" /></button>
+      </div>
+
+      <div className="w-full px-4 py-4">
+        {/* Breadcrumb */}
+        <nav className="text-sm text-gray-500 mb-4 hidden md:block">
+          <Link to="/" className="hover:text-green-600">Çiçekçi Burada</Link>
+          <span className="mx-2">›</span>
+          {category && <><Link to={`/kategori/${category.slug}`} className="hover:text-green-600">{category.name}</Link><span className="mx-2">›</span></>}
+          <span className="text-gray-900">{product.title}</span>
+        </nav>
+
+        {/* Desktop back button */}
+        <button onClick={() => navigate(-1)} className="hidden md:flex items-center gap-2 text-gray-500 hover:text-green-600 mb-4 bg-transparent border-0 cursor-pointer text-sm font-medium">
+          <svg viewBox="0 0 24 24" className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2"><path d="M15 18l-6-6 6-6"/></svg>
           Geri Dön
         </button>
-        
-        <div className="bg-white rounded-2xl shadow-sm overflow-hidden">
-          <div className="grid md:grid-cols-2 gap-0">
-            <div className="aspect-square">
-              <img 
-                src={product.image}
-                alt={product.title}
-                className="w-full h-full object-cover"
-              />
-            </div>
-            
-            <div className="p-8">
-              <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
-                {product.title}
-              </h1>
-              
-              <div className="flex items-baseline gap-2 mb-4">
-                <span className="text-3xl font-bold text-green-600">{product.price}</span>
-                <span className="text-lg text-gray-500">,00 TL</span>
-                <span className="text-sm text-gray-400">(KDV Dahil)</span>
+
+        <div className="grid md:grid-cols-2 gap-6">
+          {/* Gallery */}
+          <div className="bg-white rounded-xl overflow-hidden shadow-sm">
+            <div className="relative aspect-square">
+              <img src={product.image} alt={product.title} className="w-full h-full object-cover" />
+              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-4">
+                <h1 className="text-white text-xl font-bold">{product.title}</h1>
               </div>
-              
-              {product.badge && (
-                <div className="inline-block px-3 py-1.5 rounded-full bg-green-100 text-green-700 text-sm font-semibold mb-6">
-                  {product.badge}
-                </div>
-              )}
-              
-              {product.description && (
-                <p className="text-gray-600 leading-relaxed mb-6">
-                  {product.description}
-                </p>
-              )}
-              
-              <button 
-                className="w-full bg-green-500 text-white py-4 rounded-xl font-bold text-lg hover:bg-green-600 transition-colors"
-                data-testid="add-to-cart-btn"
-              >
-                Sepete Ekle
-              </button>
-              
-              <div className="mt-6 p-4 bg-green-50 rounded-xl">
-                <div className="flex items-center gap-3 text-gray-600">
-                  <span className="text-2xl">🚚</span>
-                  <div>
-                    <div className="font-semibold text-gray-900">Aynı Gün Teslimat</div>
-                    <div className="text-sm">14:00'a kadar verilen siparişler aynı gün teslim edilir</div>
+            </div>
+          </div>
+
+          {/* Summary */}
+          <div className="bg-white rounded-xl p-6 shadow-sm">
+            {/* Location Input */}
+            <div className="mb-6">
+              <label className="block text-sm font-semibold text-gray-700 mb-2">📍 Gönderim Yeri</label>
+              <div className="relative">
+                <input
+                  type="text"
+                  value={location}
+                  onChange={(e) => { setLocation(e.target.value); setShowLocationDropdown(true); }}
+                  onFocus={() => setShowLocationDropdown(true)}
+                  placeholder="Gönderim yeri yazın (ör. Bağlar Mah)"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-green-500"
+                  data-testid="location-input"
+                />
+                {showLocationDropdown && filteredLocations.length > 0 && (
+                  <div className="absolute top-full left-0 right-0 bg-white border border-gray-200 rounded-lg shadow-lg mt-1 z-10 max-h-48 overflow-auto">
+                    {filteredLocations.map((loc, idx) => (
+                      <button
+                        key={idx}
+                        onClick={() => { setLocation(loc); setShowLocationDropdown(false); }}
+                        className="w-full text-left px-4 py-3 hover:bg-green-50 text-gray-700 border-b border-gray-100 last:border-0"
+                      >
+                        {loc}
+                      </button>
+                    ))}
                   </div>
-                </div>
+                )}
               </div>
             </div>
+
+            {/* Date Selection */}
+            {location.length >= 3 && (
+              <div className="mb-6">
+                <label className="block text-sm font-semibold text-gray-700 mb-2">📅 Teslimat Tarihi</label>
+                <div className="grid grid-cols-4 gap-2 relative">
+                  {[
+                    { label: 'Bugün', date: today },
+                    { label: 'Yarın', date: tomorrow },
+                    { label: 'Ertesi Gün', date: dayAfter },
+                  ].map((item, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => { setSelectedDate(item.date); setShowCalendar(false); }}
+                      className={`p-3 rounded-lg border text-center transition-colors ${
+                        selectedDate?.toDateString() === item.date.toDateString()
+                          ? 'bg-green-500 text-white border-green-500'
+                          : 'bg-white border-gray-200 hover:border-green-400'
+                      }`}
+                    >
+                      <div className="font-semibold text-sm">{item.label}</div>
+                      <div className="text-xs mt-1 opacity-80">{formatDate(item.date, { day: '2-digit', month: 'short' })}</div>
+                    </button>
+                  ))}
+                  <button
+                    onClick={() => setShowCalendar(!showCalendar)}
+                    className={`p-3 rounded-lg border text-center transition-colors ${
+                      showCalendar ? 'bg-green-500 text-white border-green-500' : 'bg-white border-gray-200 hover:border-green-400'
+                    }`}
+                  >
+                    <div className="font-semibold text-sm">Tarih Seç</div>
+                    <div className="text-xs mt-1 opacity-80">Takvim</div>
+                  </button>
+                  {showCalendar && renderCalendar()}
+                </div>
+              </div>
+            )}
+
+            {/* Time Selection */}
+            {selectedDate && (
+              <div className="mb-6">
+                <label className="block text-sm font-semibold text-gray-700 mb-2">🕐 Teslimat Saati</label>
+                <div className="grid grid-cols-2 gap-2">
+                  {timeSlots.map((slot, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => setSelectedTime(slot)}
+                      className={`p-3 rounded-lg border text-sm font-medium transition-colors ${
+                        selectedTime === slot
+                          ? 'bg-green-500 text-white border-green-500'
+                          : 'bg-white border-gray-200 hover:border-green-400'
+                      }`}
+                    >
+                      {slot}
+                    </button>
+                  ))}
+                </div>
+                {selectedTime && (
+                  <div className="mt-3 text-sm text-green-600 font-medium">
+                    ✓ Seçim: {formatDate(selectedDate, { day: '2-digit', month: 'short', weekday: 'short' })} • {selectedTime}
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Price */}
+            <div className="border-t border-gray-100 pt-4 mb-4">
+              <div className="flex items-baseline gap-1">
+                <span className="text-3xl font-bold text-gray-900">{product.price}</span>
+                <span className="text-lg text-gray-500">,00 TL</span>
+              </div>
+              <div className="text-sm text-gray-400">(KDV Dahil)</div>
+            </div>
+
+            {/* Order Button */}
+            <button
+              onClick={handleOrder}
+              className="w-full bg-green-500 text-white py-4 rounded-xl font-bold text-lg hover:bg-green-600 transition-colors"
+              data-testid="order-btn"
+            >
+              {selectedTime ? 'Seçimle Sipariş Ver →' : 'Sipariş Ver →'}
+            </button>
+
+            {/* Product Details */}
+            <div className="mt-6 pt-6 border-t border-gray-100">
+              <h3 className="font-bold text-gray-900 mb-2">Çiçek Hakkında Detaylı Bilgi</h3>
+              <p className="text-gray-600 text-sm mb-4">
+                {product.description || 'Seçtiğiniz aranjman özenle hazırlanır ve aynı gün teslimat seçenekleriyle gönderilir.'}
+              </p>
+              
+              <h3 className="font-bold text-gray-900 mb-2">Ürünün İçeriği</h3>
+              <ul className="text-gray-600 text-sm space-y-1 mb-4">
+                <li>• Taze çiçekler ve yeşillikler</li>
+                <li>• Uygun vazo / saksı</li>
+                <li>• Not kartı</li>
+              </ul>
+              
+              <h3 className="font-bold text-gray-900 mb-2">Bu Aranjmanı Özel Kılan Detaylar</h3>
+              <ul className="text-gray-600 text-sm space-y-1">
+                <li>• Her ortama yakışan modern tasarım</li>
+                <li>• Birçok duruma uygun</li>
+                <li>• Doğal ve şık görünüm</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        {/* Best Sellers Section */}
+        <div className="mt-8">
+          <h2 className="text-xl font-bold text-gray-900 mb-4">En Çok Satanlar</h2>
+          <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide">
+            {products.filter(p => p.is_bestseller && p.id !== product.id).slice(0, 6).map((p) => (
+              <ProductCard key={p.id} product={p} />
+            ))}
           </div>
         </div>
       </div>
