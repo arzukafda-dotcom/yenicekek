@@ -380,7 +380,7 @@ async def seed_database():
     for template in product_templates:
         for name in template["names"]:
             for suffix in template["suffix"]:
-                for i in range(3):  # Her kombinasyon için 3 varyasyon
+                for i in range(5):  # Her kombinasyon için 5 varyasyon
                     title = f"{name} {suffix}".strip()
                     if i > 0:
                         title = f"{title} #{i+1}"
