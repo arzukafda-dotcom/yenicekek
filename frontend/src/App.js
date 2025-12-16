@@ -161,7 +161,7 @@ const CircularCategories = ({ categories }) => {
 
   return (
     <div className="bg-white py-4 border-b border-gray-100 relative">
-      <div className="max-w-7xl mx-auto px-4">
+      <div className="w-full px-4">
         {/* Left Arrow */}
         <button 
           onClick={() => scroll('left')}
@@ -176,7 +176,7 @@ const CircularCategories = ({ categories }) => {
         {/* Categories */}
         <div 
           ref={scrollRef}
-          className="flex items-start gap-8 overflow-x-auto scrollbar-hide px-8"
+          className="flex items-start justify-center gap-8 overflow-x-auto scrollbar-hide px-8"
         >
           {displayCategories.map((cat, idx) => (
             <Link
