@@ -329,48 +329,52 @@ const CircularCategories = ({ categories }) => {
 // ===== HERO SLIDER =====
 const HeroSlider = ({ banners }) => {
   return (
-    <div className="bg-white">
-      {/* Desktop: Grid 2 columns - responsive aspect ratio */}
-      <div className="hidden md:grid md:grid-cols-2 gap-1">
+    <div className="bg-white w-full">
+      {/* Desktop & Tablet: Grid 2 columns - responsive height based on viewport */}
+      <div className="hidden md:grid md:grid-cols-2 gap-0.5">
         <Link
           to="/kategori/tasarim"
-          className="relative overflow-hidden group"
-          style={{ aspectRatio: '16/9' }}
+          className="relative overflow-hidden group block w-full"
           data-testid="hero-banner-0"
         >
-          <img 
-            src="https://customer-assets.emergentagent.com/job_html-spa-converter/artifacts/k4xtaij1_hero.png"
-            alt="Kokina - Yeni Yılın Gözdesi"
-            className="w-full h-full object-contain bg-gray-50 group-hover:scale-105 transition-transform duration-500"
-          />
+          <div className="w-full" style={{ paddingBottom: '56.25%', position: 'relative' }}>
+            <img 
+              src="https://customer-assets.emergentagent.com/job_html-spa-converter/artifacts/k4xtaij1_hero.png"
+              alt="Kokina - Yeni Yılın Gözdesi"
+              className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+            />
+          </div>
         </Link>
 
         <Link
           to="/kategori/gul"
-          className="relative overflow-hidden group"
-          style={{ aspectRatio: '16/9' }}
+          className="relative overflow-hidden group block w-full"
           data-testid="hero-banner-1"
         >
-          <img 
-            src="https://customer-assets.emergentagent.com/job_html-spa-converter/artifacts/o8av0npy_kirmizi-gul.png"
-            alt="Kırmızı Güller"
-            className="w-full h-full object-contain bg-gray-50 group-hover:scale-105 transition-transform duration-500"
-          />
+          <div className="w-full" style={{ paddingBottom: '56.25%', position: 'relative' }}>
+            <img 
+              src="https://customer-assets.emergentagent.com/job_html-spa-converter/artifacts/o8av0npy_kirmizi-gul.png"
+              alt="Kırmızı Güller"
+              className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+            />
+          </div>
         </Link>
       </div>
 
-      {/* Mobile: Stack vertically - full width responsive */}
-      <div className="md:hidden flex flex-col gap-1">
+      {/* Mobile: Stack vertically - full width */}
+      <div className="md:hidden flex flex-col gap-0.5">
         <Link
           to="/kategori/tasarim"
           className="relative block w-full overflow-hidden"
           data-testid="hero-banner-mobile-0"
         >
-          <img 
-            src="https://customer-assets.emergentagent.com/job_html-spa-converter/artifacts/k4xtaij1_hero.png"
-            alt="Kokina - Yeni Yılın Gözdesi"
-            className="w-full h-auto object-contain"
-          />
+          <div className="w-full" style={{ paddingBottom: '56.25%', position: 'relative' }}>
+            <img 
+              src="https://customer-assets.emergentagent.com/job_html-spa-converter/artifacts/k4xtaij1_hero.png"
+              alt="Kokina - Yeni Yılın Gözdesi"
+              className="absolute inset-0 w-full h-full object-cover"
+            />
+          </div>
         </Link>
 
         <Link
@@ -378,11 +382,13 @@ const HeroSlider = ({ banners }) => {
           className="relative block w-full overflow-hidden"
           data-testid="hero-banner-mobile-1"
         >
-          <img 
-            src="https://customer-assets.emergentagent.com/job_html-spa-converter/artifacts/o8av0npy_kirmizi-gul.png"
-            alt="Kırmızı Güller"
-            className="w-full h-auto object-contain"
-          />
+          <div className="w-full" style={{ paddingBottom: '56.25%', position: 'relative' }}>
+            <img 
+              src="https://customer-assets.emergentagent.com/job_html-spa-converter/artifacts/o8av0npy_kirmizi-gul.png"
+              alt="Kırmızı Güller"
+              className="absolute inset-0 w-full h-full object-cover"
+            />
+          </div>
         </Link>
       </div>
     </div>
