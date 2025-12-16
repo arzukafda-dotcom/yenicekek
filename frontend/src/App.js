@@ -893,42 +893,42 @@ const ProductDetailPage = ({ categories }) => {
   
   const timeSlots = ['09:00 - 12:00', '12:00 - 15:00', '15:00 - 18:00', '18:00 - 21:00'];
   
-  // Location search - Türkiye illeri listesi
-  const turkeyProvinces = [
-    "Adana", "Adıyaman", "Afyonkarahisar", "Ağrı", "Aksaray", "Amasya", "Ankara", "Antalya", "Artvin", "Aydın",
-    "Balıkesir", "Bartın", "Batman", "Bayburt", "Bilecik", "Bingöl", "Bitlis", "Bolu", "Burdur", "Bursa",
-    "Çanakkale", "Çankırı", "Çorum", "Denizli", "Diyarbakır", "Düzce", "Edirne", "Elazığ", "Erzincan", "Erzurum",
-    "Eskişehir", "Gaziantep", "Giresun", "Gümüşhane", "Hakkari", "Hatay", "Iğdır", "Isparta", "İstanbul", "İzmir",
-    "Kahramanmaraş", "Karabük", "Karaman", "Kars", "Kastamonu", "Kayseri", "Kırıkkale", "Kırklareli", "Kırşehir", "Kilis",
-    "Kocaeli", "Konya", "Kütahya", "Malatya", "Manisa", "Mardin", "Mersin", "Muğla", "Muş", "Nevşehir",
-    "Niğde", "Ordu", "Osmaniye", "Rize", "Sakarya", "Samsun", "Siirt", "Sinop", "Sivas", "Şanlıurfa",
-    "Şırnak", "Tekirdağ", "Tokat", "Trabzon", "Tunceli", "Uşak", "Van", "Yalova", "Yozgat", "Zonguldak",
-    // İstanbul ilçeleri
-    "Kadıköy, İstanbul", "Beşiktaş, İstanbul", "Şişli, İstanbul", "Beyoğlu, İstanbul", "Bakırköy, İstanbul",
-    "Ümraniye, İstanbul", "Üsküdar, İstanbul", "Maltepe, İstanbul", "Pendik, İstanbul", "Kartal, İstanbul",
-    "Fatih, İstanbul", "Beylikdüzü, İstanbul", "Esenyurt, İstanbul", "Başakşehir, İstanbul", "Sarıyer, İstanbul",
-    // Ankara ilçeleri
-    "Çankaya, Ankara", "Keçiören, Ankara", "Yenimahalle, Ankara", "Mamak, Ankara", "Etimesgut, Ankara",
-    // İzmir ilçeleri
-    "Konak, İzmir", "Karşıyaka, İzmir", "Bornova, İzmir", "Buca, İzmir", "Bayraklı, İzmir",
-  ];
+  // Location search state
+  const [locationResults, setLocationResults] = useState([]);
+  const [locationLoading, setLocationLoading] = useState(false);
+  const locationSearchRef = useRef(null);
 
-  // Türkçe karakter dönüşümü
-  const normalizeText = (text) => {
-    return text
-      .toLowerCase()
-      .replace(/ı/g, 'i')
-      .replace(/ğ/g, 'g')
-      .replace(/ü/g, 'u')
-      .replace(/ş/g, 's')
-      .replace(/ö/g, 'o')
-      .replace(/ç/g, 'c')
-      .replace(/İ/g, 'i');
-  };
+  // Location search with API
+  useEffect(() => {
+    if (locationSearchRef.current) {
+      clearTimeout(locationSearchRef.current);
+    }
 
-  const filteredLocations = location.length >= 2
-    ? turkeyProvinces.filter(loc => normalizeText(loc).includes(normalizeText(location))).slice(0, 8)
-    : [];
+    if (location.length >= 2 && showLocationDropdown) {
+      setLocationLoading(true);
+      locationSearchRef.current = setTimeout(async () => {
+        try {
+          const res = await axios.get(`${API}/locations/search?q=${encodeURIComponent(location)}`);
+          setLocationResults(res.data.results || []);
+        } catch (e) {
+          console.error('Location search error:', e);
+          setLocationResults([]);
+        }
+        setLocationLoading(false);
+      }, 400);
+    } else {
+      setLocationResults([]);
+      setLocationLoading(false);
+    }
+
+    return () => {
+      if (locationSearchRef.current) {
+        clearTimeout(locationSearchRef.current);
+      }
+    };
+  }, [location, showLocationDropdown]);
+
+  const filteredLocations = locationResults;
 
   // Calendar rendering
   const renderCalendar = () => {
