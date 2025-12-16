@@ -287,7 +287,7 @@ const ProductCard = ({ product }) => {
 // ===== PRODUCT SECTION =====
 const ProductSection = ({ title, subtitle, products, viewAllLink }) => (
   <section className="py-8" data-testid={`section-${title.replace(/\s+/g, '-').toLowerCase()}`}>
-    <div className="max-w-7xl mx-auto px-4">
+    <div className="w-full px-4">
       <div className="flex items-center justify-between mb-6">
         <div>
           <h2 className="text-xl md:text-2xl font-bold text-gray-900">{title}</h2>
@@ -306,8 +306,8 @@ const ProductSection = ({ title, subtitle, products, viewAllLink }) => (
         )}
       </div>
       
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-        {products.slice(0, 5).map((product) => (
+      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+        {products.slice(0, 6).map((product) => (
           <ProductCard key={product.id} product={product} />
         ))}
       </div>
