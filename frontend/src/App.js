@@ -177,15 +177,26 @@ const CategoryNavBar = ({ categories }) => {
 // ===== CIRCULAR CATEGORY ICONS =====
 const CircularCategories = ({ categories }) => {
   const displayCategories = [
-    { name: "Orkide", slug: "orkide", image: "https://images.unsplash.com/photo-1567748157439-651aca2ff064?w=120&h=120&fit=crop" },
-    { name: "Gül", slug: "gul", image: "https://images.unsplash.com/photo-1518621736915-f3b1c41bfd00?w=120&h=120&fit=crop" },
-    { name: "Papatya", slug: "papatya-gerbera", image: "https://images.unsplash.com/photo-1490750967868-88aa4486c946?w=120&h=120&fit=crop" },
-    { name: "Saksı Çiçekleri", slug: "saksi-cicekleri", image: "https://images.unsplash.com/photo-1459411552884-841db9b3cc2a?w=120&h=120&fit=crop" },
-    { name: "Lilyum", slug: "lilyum", image: "https://images.unsplash.com/photo-1468327768560-75b778cbb551?w=120&h=120&fit=crop" },
-    { name: "Ayçiçeği", slug: "aycicegi", image: "https://images.unsplash.com/photo-1551731409-43eb3e517a1a?w=120&h=120&fit=crop" },
-    { name: "Antoryum", slug: "antoryum", image: "https://images.unsplash.com/photo-1598880940371-c756e015fea1?w=120&h=120&fit=crop" },
     { name: "Kokina", slug: "kokina", image: "https://images.unsplash.com/photo-1512418490979-92798cec1380?w=120&h=120&fit=crop" },
-    { name: "Tasarım", slug: "tasarim", image: "https://images.unsplash.com/photo-1563241527-3004b7be0ffd?w=120&h=120&fit=crop" },
+    { name: "Doğum Günü", slug: "dogum-gunu", image: "https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=120&h=120&fit=crop" },
+    { name: "Sevgi & Aşk", slug: "sevgi-ask", image: "https://images.unsplash.com/photo-1518621736915-f3b1c41bfd00?w=120&h=120&fit=crop" },
+    { name: "Çiçek Buketleri", slug: "cicek-buketleri", image: "https://images.unsplash.com/photo-1487530811176-3780de880c2d?w=120&h=120&fit=crop" },
+    { name: "Saksı Çiçekleri", slug: "saksi-cicekleri", image: "https://images.unsplash.com/photo-1459411552884-841db9b3cc2a?w=120&h=120&fit=crop" },
+    { name: "Yeni İş", slug: "yeni-is-terfi", image: "https://images.unsplash.com/photo-1563241527-3004b7be0ffd?w=120&h=120&fit=crop" },
+    { name: "Orkide", slug: "orkide", image: "https://images.unsplash.com/photo-1567748157439-651aca2ff064?w=120&h=120&fit=crop" },
+    { name: "Geçmiş Olsun", slug: "gecmis-olsun", image: "https://images.unsplash.com/photo-1520763185298-1b434c919102?w=120&h=120&fit=crop" },
+    { name: "Gül Çeşitleri", slug: "gul", image: "https://images.unsplash.com/photo-1455659817273-f96807779a8a?w=120&h=120&fit=crop" },
+    { name: "Açılış / Kutlama", slug: "acilis-kutlama", image: "https://images.unsplash.com/photo-1525310072745-f49212b5ac6d?w=120&h=120&fit=crop" },
+    { name: "Çelenk", slug: "celenk", image: "https://images.unsplash.com/photo-1490750967868-88aa4486c946?w=120&h=120&fit=crop" },
+    { name: "Yeni Bebek", slug: "dogum-yeni-bebek", image: "https://images.unsplash.com/photo-1518882605630-8eb573696572?w=120&h=120&fit=crop" },
+    { name: "Ayçiçeği", slug: "aycicegi", image: "https://images.unsplash.com/photo-1551731409-43eb3e517a1a?w=120&h=120&fit=crop" },
+    { name: "Papatyalar", slug: "papatya-gerbera", image: "https://images.unsplash.com/photo-1490750967868-88aa4486c946?w=120&h=120&fit=crop" },
+    { name: "Antoryum", slug: "antoryum", image: "https://images.unsplash.com/photo-1598880940371-c756e015fea1?w=120&h=120&fit=crop" },
+    { name: "Hüsnüyusuf", slug: "husnuyusuf", image: "https://images.unsplash.com/photo-1508610048659-a06b669e3321?w=120&h=120&fit=crop" },
+    { name: "Tasarım Çiçekler", slug: "tasarim", image: "https://images.unsplash.com/photo-1563241527-3004b7be0ffd?w=120&h=120&fit=crop" },
+    { name: "Kırmızı Gül", slug: "kirmizi-gul", image: "https://images.unsplash.com/photo-1518621736915-f3b1c41bfd00?w=120&h=120&fit=crop" },
+    { name: "Beyaz Gül", slug: "beyaz-gul", image: "https://images.unsplash.com/photo-1582794543139-8ac9cb0f7b11?w=120&h=120&fit=crop" },
+    { name: "Nikah / Düğün", slug: "nikah-dugun", image: "https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=120&h=120&fit=crop" },
   ];
 
   const scrollRef = useRef(null);
