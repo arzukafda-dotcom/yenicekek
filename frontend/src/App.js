@@ -970,6 +970,17 @@ const ProductDetailPage = ({ categories }) => {
     alert(`Sipariş oluşturuldu!\n\nÜrün: ${product.title}\nKonum: ${location}\nTarih: ${formatDate(selectedDate, { day: '2-digit', month: 'long', year: 'numeric' })}\nSaat: ${selectedTime}\nTutar: ${product.price},00 TL`);
   };
 
+  if (loadingProduct) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-500 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Ürün yükleniyor...</p>
+        </div>
+      </div>
+    );
+  }
+
   if (!product) {
     return (
       <div className="w-full px-4 py-12 text-center" data-testid="product-not-found">
