@@ -923,12 +923,14 @@ const ProductDetailPage = ({ categories }) => {
       clearTimeout(searchTimeoutRef.current);
     }
     
-    if (location.length >= 2 && showLocationDropdown) {
+    if (location.length >= 2) {
+      setLocationLoading(true);
       searchTimeoutRef.current = setTimeout(() => {
         searchLocations(location);
-      }, 300);
+      }, 500);
     } else {
       setLocationResults([]);
+      setLocationLoading(false);
     }
     
     return () => {
@@ -936,7 +938,7 @@ const ProductDetailPage = ({ categories }) => {
         clearTimeout(searchTimeoutRef.current);
       }
     };
-  }, [location, showLocationDropdown, searchLocations]);
+  }, [location, searchLocations]);
 
   const filteredLocations = locationResults;
 
