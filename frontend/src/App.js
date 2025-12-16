@@ -265,11 +265,11 @@ const CircularCategories = ({ categories }) => {
 const HeroSlider = ({ banners }) => {
   return (
     <div className="bg-white">
-      <div className="grid md:grid-cols-2 gap-1">
-        {/* Left Banner - Kokina */}
+      {/* Desktop: Grid 2 columns */}
+      <div className="hidden md:grid md:grid-cols-2 gap-1">
         <Link
           to="/kategori/tasarim"
-          className="relative overflow-hidden h-80 md:h-[420px] group"
+          className="relative overflow-hidden h-[420px] group"
           data-testid="hero-banner-0"
         >
           <img 
@@ -279,16 +279,42 @@ const HeroSlider = ({ banners }) => {
           />
         </Link>
 
-        {/* Right Banner - Kırmızı Güller */}
         <Link
           to="/kategori/gul"
-          className="relative overflow-hidden h-80 md:h-[420px] group"
+          className="relative overflow-hidden h-[420px] group"
           data-testid="hero-banner-1"
         >
           <img 
             src="https://customer-assets.emergentagent.com/job_html-spa-converter/artifacts/o8av0npy_kirmizi-gul.png"
             alt="Kırmızı Güller"
             className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
+          />
+        </Link>
+      </div>
+
+      {/* Mobile: Stack vertically */}
+      <div className="md:hidden flex flex-col gap-1">
+        <Link
+          to="/kategori/tasarim"
+          className="relative overflow-hidden h-56 group"
+          data-testid="hero-banner-mobile-0"
+        >
+          <img 
+            src="https://customer-assets.emergentagent.com/job_html-spa-converter/artifacts/k4xtaij1_hero.png"
+            alt="Kokina - Yeni Yılın Gözdesi"
+            className="w-full h-full object-cover object-center"
+          />
+        </Link>
+
+        <Link
+          to="/kategori/gul"
+          className="relative overflow-hidden h-56 group"
+          data-testid="hero-banner-mobile-1"
+        >
+          <img 
+            src="https://customer-assets.emergentagent.com/job_html-spa-converter/artifacts/o8av0npy_kirmizi-gul.png"
+            alt="Kırmızı Güller"
+            className="w-full h-full object-cover object-center"
           />
         </Link>
       </div>
