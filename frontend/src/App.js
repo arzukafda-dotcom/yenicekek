@@ -757,18 +757,98 @@ const AboutPage = () => (
   </div>
 );
 
+// ===== MOBILE SIDE MENU =====
+const MobileSideMenu = ({ isOpen, onClose, categories }) => {
+  const location = useLocation();
+  
+  const menuCategories = [
+    { name: "Tüm Çiçekler", slug: "tumu", icon: "🌸" },
+    { name: "Güller", slug: "gul", icon: "🌹" },
+    { name: "Orkideler", slug: "orkide", icon: "🌸" },
+    { name: "Tasarım", slug: "tasarim", icon: "💐" },
+    { name: "Doğum Günü", slug: "dogum-gunu", icon: "🎂" },
+    { name: "Papatya & Gerbera", slug: "papatya-gerbera", icon: "🌼" },
+  ];
+
+  return (
+    <>
+      {/* Overlay */}
+      <div 
+        className={`fixed inset-0 bg-black/50 z-40 transition-opacity duration-300 md:hidden ${
+          isOpen ? 'opacity-100 visible' : 'opacity-0 invisible'
+        }`}
+        onClick={onClose}
+      />
+      
+      {/* Side Menu */}
+      <div className={`fixed top-0 left-0 bottom-0 w-72 bg-green-500 z-50 transform transition-transform duration-300 md:hidden ${
+        isOpen ? 'translate-x-0' : '-translate-x-full'
+      }`}>
+        {/* Menu Header */}
+        <div className="flex items-center justify-between p-4 border-b border-green-400">
+          <MobileLogo />
+          <button onClick={onClose} className="text-white p-2">
+            <svg viewBox="0 0 24 24" className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+          </button>
+        </div>
+        
+        {/* Menu Items */}
+        <div className="py-4">
+          <Link 
+            to="/" 
+            onClick={onClose}
+            className={`flex items-center gap-3 px-4 py-3 text-white font-medium ${
+              location.pathname === '/' ? 'bg-green-600' : 'hover:bg-green-600'
+            }`}
+          >
+            <span className="text-xl">🏠</span>
+            <span>Anasayfa</span>
+          </Link>
+          
+          <div className="px-4 py-2 text-green-200 text-sm font-semibold uppercase">Kategoriler</div>
+          
+          {menuCategories.map((cat) => (
+            <Link 
+              key={cat.slug}
+              to={`/kategori/${cat.slug}`}
+              onClick={onClose}
+              className={`flex items-center gap-3 px-4 py-3 text-white font-medium ${
+                location.pathname === `/kategori/${cat.slug}` ? 'bg-green-600' : 'hover:bg-green-600'
+              }`}
+            >
+              <span className="text-xl">{cat.icon}</span>
+              <span>{cat.name}</span>
+            </Link>
+          ))}
+        </div>
+      </div>
+    </>
+  );
+};
+
 // ===== MAIN LAYOUT =====
-const Layout = ({ children, categories }) => (
-  <div className="min-h-screen bg-gray-50 flex flex-col">
-    <MainHeader />
-    <CategoryNavBar categories={categories} />
-    <main className="flex-1">
-      {children}
-    </main>
-    <Footer />
-    <BackToTop />
-  </div>
-);
+const Layout = ({ children, categories }) => {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  
+  return (
+    <div className="min-h-screen bg-gray-50 flex flex-col">
+      <MainHeader onMenuToggle={() => setIsMobileMenuOpen(true)} />
+      <CategoryNavBar categories={categories} />
+      <MobileSideMenu 
+        isOpen={isMobileMenuOpen} 
+        onClose={() => setIsMobileMenuOpen(false)}
+        categories={categories}
+      />
+      <main className="flex-1">
+        {children}
+      </main>
+      <Footer />
+      <BackToTop />
+    </div>
+  );
+};
 
 // ===== APP =====
 function App() {
