@@ -1468,7 +1468,7 @@ const ProductDetailPage = ({ categories }) => {
         {relatedProducts.length > 0 && (
           <div className="mt-8">
             <h2 className="text-xl font-bold text-gray-900 mb-4">En Çok Satanlar</h2>
-            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-6 gap-4">
               {relatedProducts.slice(0, 6).map((p) => (
                 <ProductCard key={p.id} product={p} />
               ))}
