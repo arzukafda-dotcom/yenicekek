@@ -898,26 +898,7 @@ const ProductDetailPage = ({ categories }) => {
   const [locationLoading, setLocationLoading] = useState(false);
   const searchTimeoutRef = useRef(null);
 
-  // Location search function
-  const searchLocations = useCallback(async (query) => {
-    if (query.length < 2) {
-      setLocationResults([]);
-      return;
-    }
-    
-    setLocationLoading(true);
-    try {
-      const res = await axios.get(`${API}/locations/search?q=${encodeURIComponent(query)}`);
-      setLocationResults(res.data.results || []);
-    } catch (e) {
-      console.error('Location search error:', e);
-      setLocationResults([]);
-    } finally {
-      setLocationLoading(false);
-    }
-  }, []);
-
-  // Debounced location search
+  // Debounced location search with inline async
   useEffect(() => {
     if (searchTimeoutRef.current) {
       clearTimeout(searchTimeoutRef.current);
@@ -925,8 +906,15 @@ const ProductDetailPage = ({ categories }) => {
     
     if (location.length >= 2) {
       setLocationLoading(true);
-      searchTimeoutRef.current = setTimeout(() => {
-        searchLocations(location);
+      searchTimeoutRef.current = setTimeout(async () => {
+        try {
+          const res = await axios.get(`${API}/locations/search?q=${encodeURIComponent(location)}`);
+          setLocationResults(res.data.results || []);
+        } catch (e) {
+          console.error('Location search error:', e);
+          setLocationResults([]);
+        }
+        setLocationLoading(false);
       }, 500);
     } else {
       setLocationResults([]);
@@ -938,7 +926,7 @@ const ProductDetailPage = ({ categories }) => {
         clearTimeout(searchTimeoutRef.current);
       }
     };
-  }, [location, searchLocations]);
+  }, [location]);
 
   const filteredLocations = locationResults;
 
