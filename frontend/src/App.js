@@ -285,29 +285,29 @@ const HeroSlider = ({ banners }) => {
         </Link>
       </div>
 
-      {/* Mobile: Stack vertically */}
-      <div className="md:hidden flex flex-col gap-1">
+      {/* Mobile: Stack vertically - full width no gaps */}
+      <div className="md:hidden flex flex-col">
         <Link
           to="/kategori/tasarim"
-          className="relative overflow-hidden h-56 group"
+          className="relative block w-full"
           data-testid="hero-banner-mobile-0"
         >
           <img 
             src="https://customer-assets.emergentagent.com/job_html-spa-converter/artifacts/k4xtaij1_hero.png"
             alt="Kokina - Yeni Yılın Gözdesi"
-            className="w-full h-full object-cover object-center"
+            className="w-full h-auto block"
           />
         </Link>
 
         <Link
           to="/kategori/gul"
-          className="relative overflow-hidden h-56 group"
+          className="relative block w-full"
           data-testid="hero-banner-mobile-1"
         >
           <img 
             src="https://customer-assets.emergentagent.com/job_html-spa-converter/artifacts/o8av0npy_kirmizi-gul.png"
             alt="Kırmızı Güller"
-            className="w-full h-full object-cover object-center"
+            className="w-full h-auto block"
           />
         </Link>
       </div>
