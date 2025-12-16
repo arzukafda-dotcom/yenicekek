@@ -63,14 +63,14 @@ const HamburgerIcon = () => (
   </div>
 );
 
-// ===== MOBILE LOGO (White hearts for green header) =====
+// ===== MOBILE LOGO (Red hearts for green header) =====
 const MobileLogo = () => (
   <Link to="/" className="flex items-center gap-1" data-testid="mobile-logo-link">
     <div className="flex">
-      <svg viewBox="0 0 32 32" className="w-6 h-6 text-white fill-current">
+      <svg viewBox="0 0 32 32" className="w-6 h-6 text-red-500 fill-current">
         <path d="M16 28l-1.8-1.6C6.4 19.2 2 15.2 2 10.4 2 6.4 5.2 3.2 9.2 3.2c2.2 0 4.4 1 5.8 2.6L16 7l1-1.2C18.4 4.2 20.6 3.2 22.8 3.2 26.8 3.2 30 6.4 30 10.4c0 4.8-4.4 8.8-12.2 16L16 28z"/>
       </svg>
-      <svg viewBox="0 0 32 32" className="w-6 h-6 text-white fill-current -ml-1">
+      <svg viewBox="0 0 32 32" className="w-6 h-6 text-red-500 fill-current -ml-1">
         <path d="M16 28l-1.8-1.6C6.4 19.2 2 15.2 2 10.4 2 6.4 5.2 3.2 9.2 3.2c2.2 0 4.4 1 5.8 2.6L16 7l1-1.2C18.4 4.2 20.6 3.2 22.8 3.2 26.8 3.2 30 6.4 30 10.4c0 4.8-4.4 8.8-12.2 16L16 28z"/>
       </svg>
     </div>
