@@ -755,12 +755,22 @@ const MobileSideMenu = ({ isOpen, onClose, categories }) => {
   const location = useLocation();
   
   const menuCategories = [
-    { name: "Tüm Çiçekler", slug: "tumu", icon: "🌸" },
-    { name: "Güller", slug: "gul", icon: "🌹" },
-    { name: "Orkideler", slug: "orkide", icon: "🌸" },
-    { name: "Tasarım", slug: "tasarim", icon: "💐" },
-    { name: "Doğum Günü", slug: "dogum-gunu", icon: "🎂" },
-    { name: "Papatya & Gerbera", slug: "papatya-gerbera", icon: "🌼" },
+    { name: "Orkide", slug: "orkide", icon: "🌸" },
+    { name: "Gül", slug: "gul", icon: "🌹" },
+    { name: "Papatya / Gerbera", slug: "papatya-gerbera", icon: "🌼" },
+    { name: "Saksı Çiçekleri", slug: "saksi-cicekleri", icon: "🪴" },
+    { name: "Lilyum", slug: "lilyum", icon: "🌷" },
+    { name: "Ayçiçeği", slug: "aycicegi", icon: "🌻" },
+    { name: "Hüsnüyusuf", slug: "husnuyusuf", icon: "💜" },
+    { name: "Karanfil", slug: "karanfil", icon: "🌺" },
+    { name: "Geçmiş Olsun", slug: "gecmis-olsun", icon: "💐" },
+    { name: "Yeni İş / Terfi", slug: "yeni-is-terfi", icon: "🎊" },
+    { name: "Doğum / Yeni Bebek", slug: "dogum-yeni-bebek", icon: "👶" },
+    { name: "Yıl Dönümü", slug: "yil-donumu", icon: "💕" },
+    { name: "Tasarım Çiçekler", slug: "tasarim", icon: "🎨" },
+    { name: "Çiçek Buketleri", slug: "cicek-buketleri", icon: "💐" },
+    { name: "Antoryum", slug: "antoryum", icon: "❤️" },
+    { name: "Kokina", slug: "kokina", icon: "🎄" },
   ];
 
   return (
