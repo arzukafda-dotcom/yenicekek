@@ -452,7 +452,7 @@ const HomePage = ({ products, banners, categories }) => {
       
       <div className="bg-gray-50">
         <div className="py-4">
-          <div className="max-w-7xl mx-auto px-4">
+          <div className="w-full px-4">
             <h2 className="text-xl font-bold text-gray-900">Türkiye Geneline Çiçek Gönder</h2>
           </div>
         </div>
