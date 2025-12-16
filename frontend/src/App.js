@@ -216,63 +216,53 @@ const CircularCategories = ({ categories }) => {
 
 // ===== HERO SLIDER =====
 const HeroSlider = ({ banners }) => {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [isPaused, setIsPaused] = useState(false);
-
-  const heroBanners = [
-    {
-      id: "1",
-      image: "https://images.unsplash.com/photo-1487530811176-3780de880c2d?w=600&h=400&fit=crop",
-      title: "Yeni Yılın Gözdesi",
-      subtitle: "KOKINA",
-      link: "/kategori/tasarim",
-      bgColor: "bg-red-800"
-    },
-    {
-      id: "2", 
-      image: "https://images.unsplash.com/photo-1518621736915-f3b1c41bfd00?w=600&h=400&fit=crop",
-      title: "Kalpten Kalbe Giden Yol",
-      subtitle: "Kırmızı Güller",
-      link: "/kategori/gul",
-      bgColor: "bg-pink-600"
-    }
-  ];
-
-  useEffect(() => {
-    if (isPaused) return;
-    const timer = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % heroBanners.length);
-    }, 5000);
-    return () => clearInterval(timer);
-  }, [isPaused, heroBanners.length]);
-
   return (
-    <div className="bg-white py-6">
+    <div className="bg-white py-4">
       <div className="max-w-7xl mx-auto px-4">
-        <div 
-          className="grid md:grid-cols-2 gap-4"
-          onMouseEnter={() => setIsPaused(true)}
-          onMouseLeave={() => setIsPaused(false)}
-        >
-          {heroBanners.map((banner, idx) => (
-            <Link
-              key={banner.id}
-              to={banner.link}
-              className={`relative rounded-2xl overflow-hidden h-64 md:h-80 ${banner.bgColor} group`}
-              data-testid={`hero-banner-${idx}`}
-            >
-              <img 
-                src={banner.image}
-                alt={banner.title}
-                className="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:scale-105 transition-transform duration-500"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-              <div className="absolute bottom-6 left-6 text-white">
-                <p className="text-sm opacity-90">{banner.title}</p>
-                <h3 className="text-3xl font-bold mt-1">{banner.subtitle}</h3>
-              </div>
-            </Link>
-          ))}
+        <div className="grid md:grid-cols-2 gap-4">
+          {/* Left Banner - Kokina */}
+          <Link
+            to="/kategori/tasarim"
+            className="relative rounded-lg overflow-hidden h-72 md:h-96 group"
+            data-testid="hero-banner-0"
+          >
+            <div className="absolute inset-0 bg-gradient-to-br from-red-800 via-red-700 to-red-900" />
+            <img 
+              src="https://images.unsplash.com/photo-1487530811176-3780de880c2d?w=500&h=500&fit=crop"
+              alt="Kokina"
+              className="absolute left-4 bottom-4 w-48 h-48 md:w-64 md:h-64 object-cover rounded-lg shadow-2xl group-hover:scale-105 transition-transform duration-500"
+            />
+            {/* Decorative ornaments */}
+            <div className="absolute top-4 right-4 text-6xl opacity-30">🎄</div>
+            <div className="absolute top-20 right-20 text-4xl opacity-40">🔴</div>
+            <div className="absolute bottom-10 right-10 text-3xl opacity-30">🟡</div>
+            
+            <div className="absolute top-1/2 right-6 -translate-y-1/2 text-right text-white">
+              <p className="text-sm opacity-90 font-medium">Yeni Yılın</p>
+              <p className="text-sm opacity-90 font-medium">Gözdesi:</p>
+              <h3 className="text-4xl md:text-5xl font-black mt-2 tracking-wide">KOKİNA</h3>
+            </div>
+          </Link>
+
+          {/* Right Banner - Kırmızı Güller */}
+          <Link
+            to="/kategori/gul"
+            className="relative rounded-lg overflow-hidden h-72 md:h-96 group"
+            data-testid="hero-banner-1"
+          >
+            <img 
+              src="https://images.unsplash.com/photo-1518621736915-f3b1c41bfd00?w=800&h=600&fit=crop"
+              alt="Kırmızı Güller"
+              className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+            />
+            <div className="absolute inset-0 bg-gradient-to-l from-black/50 to-transparent" />
+            <div className="absolute top-1/2 right-6 -translate-y-1/2 text-right text-white">
+              <p className="text-xs uppercase tracking-wider opacity-80 font-semibold">Kırmızı Gül</p>
+              <p className="text-sm opacity-90 mt-1">Kalpten Kalbe</p>
+              <p className="text-sm opacity-90">Giden Yol:</p>
+              <h3 className="text-2xl md:text-3xl font-bold mt-2">Kırmızı Güller</h3>
+            </div>
+          </Link>
         </div>
       </div>
     </div>
