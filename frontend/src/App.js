@@ -70,38 +70,32 @@ const MainHeader = ({ onSearch }) => {
   };
 
   return (
-    <div className="bg-white shadow-sm">
-      <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between gap-8">
+    <div className="bg-white border-b border-gray-200">
+      <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between gap-6">
         <Logo />
         
-        <form onSubmit={handleSearch} className="flex-1 max-w-xl">
-          <div className="relative">
+        <form onSubmit={handleSearch} className="flex-1 max-w-lg">
+          <div className="flex border border-gray-300 rounded-md overflow-hidden">
             <input
               type="text"
               placeholder="Ürün veya kategori ara"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              className="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg focus:outline-none focus:border-green-500 text-gray-700"
+              className="flex-1 px-4 py-2.5 border-0 focus:outline-none text-gray-700 text-sm"
               data-testid="header-search-input"
             />
             <button 
               type="submit"
-              className="absolute right-2 top-1/2 -translate-y-1/2 bg-green-500 text-white p-2 rounded-lg hover:bg-green-600 transition-colors"
+              className="bg-gray-100 hover:bg-gray-200 px-4 border-l border-gray-300 transition-colors"
               data-testid="header-search-btn"
             >
-              <SearchIcon />
+              <SearchIcon className="w-5 h-5 text-gray-500" />
             </button>
           </div>
         </form>
         
-        <div className="flex items-center gap-4">
-          <button className="text-gray-600 hover:text-green-600 transition-colors" data-testid="cart-btn">
-            <svg viewBox="0 0 24 24" className="w-7 h-7" fill="none" stroke="currentColor" strokeWidth="2">
-              <circle cx="9" cy="21" r="1"/>
-              <circle cx="20" cy="21" r="1"/>
-              <path d="m1 1 4 4 2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
-            </svg>
-          </button>
+        <div className="flex items-center">
+          {/* Empty space - no login/register buttons */}
         </div>
       </div>
     </div>
