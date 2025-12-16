@@ -1184,15 +1184,34 @@ const ProductDetailPage = ({ categories }) => {
 };
 
 // ===== SEARCH RESULTS PAGE =====
-const SearchResultsPage = ({ products }) => {
-  const location = useLocation();
-  const searchParams = new URLSearchParams(location.search);
+const SearchResultsPage = () => {
+  const loc = useLocation();
+  const searchParams = new URLSearchParams(loc.search);
   const query = searchParams.get('q') || '';
   
-  const results = products.filter(p => 
-    p.title.toLowerCase().includes(query.toLowerCase()) ||
-    p.description.toLowerCase().includes(query.toLowerCase())
-  );
+  const [results, setResults] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchResults = async () => {
+      if (query.length < 2) {
+        setResults([]);
+        setLoading(false);
+        return;
+      }
+      try {
+        setLoading(true);
+        const res = await axios.get(`${API}/search?q=${encodeURIComponent(query)}`);
+        setResults(res.data);
+      } catch (e) {
+        console.error('Error searching:', e);
+        setResults([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchResults();
+  }, [query]);
 
   return (
     <div className="bg-gray-50 min-h-screen" data-testid="search-results-page">
@@ -1202,13 +1221,27 @@ const SearchResultsPage = ({ products }) => {
         </h1>
         <p className="text-gray-500 mb-6">{results.length} ürün bulundu</p>
         
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
-          {results.map((product) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
-        </div>
+        {loading ? (
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+            {[...Array(12)].map((_, i) => (
+              <div key={i} className="bg-white rounded-xl border border-gray-100 shadow-sm animate-pulse">
+                <div className="aspect-square bg-gray-200"></div>
+                <div className="p-4">
+                  <div className="h-4 bg-gray-200 rounded mb-2"></div>
+                  <div className="h-6 bg-gray-200 rounded w-1/2"></div>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+            {results.map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
+          </div>
+        )}
         
-        {results.length === 0 && (
+        {!loading && results.length === 0 && (
           <div className="text-center py-12 text-gray-500">
             Aramanızla eşleşen ürün bulunamadı.
           </div>
