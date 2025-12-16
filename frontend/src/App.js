@@ -785,7 +785,7 @@ const MobileSideMenu = ({ isOpen, onClose, categories }) => {
       />
       
       {/* Side Menu */}
-      <div className={`fixed top-0 left-0 bottom-0 w-72 bg-green-500 z-50 transform transition-transform duration-300 md:hidden ${
+      <div className={`fixed top-0 left-0 bottom-0 w-72 bg-green-500 z-50 transform transition-transform duration-300 md:hidden overflow-y-auto ${
         isOpen ? 'translate-x-0' : '-translate-x-full'
       }`}>
         {/* Menu Header */}
