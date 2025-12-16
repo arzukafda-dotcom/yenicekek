@@ -893,42 +893,29 @@ const ProductDetailPage = ({ categories }) => {
   
   const timeSlots = ['09:00 - 12:00', '12:00 - 15:00', '15:00 - 18:00', '18:00 - 21:00'];
   
-  // Location search state
-  const [locationResults, setLocationResults] = useState([]);
-  const [locationLoading, setLocationLoading] = useState(false);
-  const searchTimeoutRef = useRef(null);
+  // Location search - Türkiye illeri listesi
+  const turkeyProvinces = [
+    "Adana", "Adıyaman", "Afyonkarahisar", "Ağrı", "Aksaray", "Amasya", "Ankara", "Antalya", "Artvin", "Aydın",
+    "Balıkesir", "Bartın", "Batman", "Bayburt", "Bilecik", "Bingöl", "Bitlis", "Bolu", "Burdur", "Bursa",
+    "Çanakkale", "Çankırı", "Çorum", "Denizli", "Diyarbakır", "Düzce", "Edirne", "Elazığ", "Erzincan", "Erzurum",
+    "Eskişehir", "Gaziantep", "Giresun", "Gümüşhane", "Hakkari", "Hatay", "Iğdır", "Isparta", "İstanbul", "İzmir",
+    "Kahramanmaraş", "Karabük", "Karaman", "Kars", "Kastamonu", "Kayseri", "Kırıkkale", "Kırklareli", "Kırşehir", "Kilis",
+    "Kocaeli", "Konya", "Kütahya", "Malatya", "Manisa", "Mardin", "Mersin", "Muğla", "Muş", "Nevşehir",
+    "Niğde", "Ordu", "Osmaniye", "Rize", "Sakarya", "Samsun", "Siirt", "Sinop", "Sivas", "Şanlıurfa",
+    "Şırnak", "Tekirdağ", "Tokat", "Trabzon", "Tunceli", "Uşak", "Van", "Yalova", "Yozgat", "Zonguldak",
+    // İstanbul ilçeleri
+    "Kadıköy, İstanbul", "Beşiktaş, İstanbul", "Şişli, İstanbul", "Beyoğlu, İstanbul", "Bakırköy, İstanbul",
+    "Ümraniye, İstanbul", "Üsküdar, İstanbul", "Maltepe, İstanbul", "Pendik, İstanbul", "Kartal, İstanbul",
+    "Fatih, İstanbul", "Beylikdüzü, İstanbul", "Esenyurt, İstanbul", "Başakşehir, İstanbul", "Sarıyer, İstanbul",
+    // Ankara ilçeleri
+    "Çankaya, Ankara", "Keçiören, Ankara", "Yenimahalle, Ankara", "Mamak, Ankara", "Etimesgut, Ankara",
+    // İzmir ilçeleri
+    "Konak, İzmir", "Karşıyaka, İzmir", "Bornova, İzmir", "Buca, İzmir", "Bayraklı, İzmir",
+  ];
 
-  // Debounced location search with inline async
-  useEffect(() => {
-    if (searchTimeoutRef.current) {
-      clearTimeout(searchTimeoutRef.current);
-    }
-    
-    if (location.length >= 2) {
-      setLocationLoading(true);
-      searchTimeoutRef.current = setTimeout(async () => {
-        try {
-          const res = await axios.get(`${API}/locations/search?q=${encodeURIComponent(location)}`);
-          setLocationResults(res.data.results || []);
-        } catch (e) {
-          console.error('Location search error:', e);
-          setLocationResults([]);
-        }
-        setLocationLoading(false);
-      }, 500);
-    } else {
-      setLocationResults([]);
-      setLocationLoading(false);
-    }
-    
-    return () => {
-      if (searchTimeoutRef.current) {
-        clearTimeout(searchTimeoutRef.current);
-      }
-    };
-  }, [location]);
-
-  const filteredLocations = locationResults;
+  const filteredLocations = location.length >= 2
+    ? turkeyProvinces.filter(loc => loc.toLowerCase().includes(location.toLowerCase())).slice(0, 8)
+    : [];
 
   // Calendar rendering
   const renderCalendar = () => {
