@@ -452,7 +452,7 @@ const ProductSection = ({ title, subtitle, products, viewAllLink }) => (
         )}
       </div>
       
-      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-6 gap-4">
         {products.slice(0, 6).map((product) => (
           <ProductCard key={product.id} product={product} />
         ))}
@@ -734,7 +734,7 @@ const HomePage = ({ banners, categories }) => {
             </div>
             
             {loading ? (
-              <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-6 gap-4">
                 {[...Array(24)].map((_, i) => (
                   <div key={i} className="bg-white rounded-xl border border-gray-100 shadow-sm animate-pulse">
                     <div className="aspect-square bg-gray-200"></div>
@@ -746,7 +746,7 @@ const HomePage = ({ banners, categories }) => {
                 ))}
               </div>
             ) : (
-              <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-6 gap-4">
                 {products.map((product) => (
                   <ProductCard key={product.id} product={product} />
                 ))}
@@ -818,7 +818,7 @@ const CategoryPage = ({ categories }) => {
         </div>
         
         {loading ? (
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-6 gap-4">
             {[...Array(24)].map((_, i) => (
               <div key={i} className="bg-white rounded-xl border border-gray-100 shadow-sm animate-pulse">
                 <div className="aspect-square bg-gray-200"></div>
@@ -830,7 +830,7 @@ const CategoryPage = ({ categories }) => {
             ))}
           </div>
         ) : (
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-6 gap-4">
             {products.map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}
@@ -1519,7 +1519,7 @@ const SearchResultsPage = () => {
         <p className="text-gray-500 mb-6">{results.length} ürün bulundu</p>
         
         {loading ? (
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-6 gap-4">
             {[...Array(12)].map((_, i) => (
               <div key={i} className="bg-white rounded-xl border border-gray-100 shadow-sm animate-pulse">
                 <div className="aspect-square bg-gray-200"></div>
@@ -1531,7 +1531,7 @@ const SearchResultsPage = () => {
             ))}
           </div>
         ) : (
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-6 gap-4">
             {results.map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}
