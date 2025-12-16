@@ -250,13 +250,49 @@ async def seed_database():
         {"id": str(uuid.uuid4()), "title": "Modern Minimalist", "description": "Sade ve şık modern aranjman", "price": 649, "category": "tasarim", "image": "https://images.unsplash.com/photo-1487530811176-3780de880c2d?w=400&h=400&fit=crop", "is_bestseller": False, "badge": "Aynı Gün Teslimat", "created_at": datetime.now(timezone.utc).isoformat()},
     ]
     
-    # Products - Papatya
+    # Products - Papatya / Gerbera
     papatya_products = [
         {"id": str(uuid.uuid4()), "title": "Papatya Buketi", "description": "Taze papatyalardan neşeli buket", "price": 399, "category": "papatya-gerbera", "image": "https://images.unsplash.com/photo-1490750967868-88aa4486c946?w=400&h=400&fit=crop", "is_bestseller": False, "badge": "Aynı Gün Teslimat", "created_at": datetime.now(timezone.utc).isoformat()},
         {"id": str(uuid.uuid4()), "title": "Gerbera Aranjmanı", "description": "Renkli gerberalardan canlı aranjman", "price": 549, "category": "papatya-gerbera", "image": "https://images.unsplash.com/photo-1518882605630-8eb573696572?w=400&h=400&fit=crop", "is_bestseller": False, "badge": "Aynı Gün Teslimat", "created_at": datetime.now(timezone.utc).isoformat()},
     ]
     
-    all_products = gul_products + orkide_products + tasarim_products + papatya_products
+    # Products - Antoryum
+    antoryum_products = [
+        {"id": str(uuid.uuid4()), "title": "Kırmızı Antoryum", "description": "Tek dallı kırmızı antoryum şık saksıda", "price": 699, "category": "antoryum", "image": "https://images.unsplash.com/photo-1598880940371-c756e015fea1?w=400&h=400&fit=crop", "is_bestseller": True, "badge": "Aynı Gün Teslimat", "created_at": datetime.now(timezone.utc).isoformat()},
+        {"id": str(uuid.uuid4()), "title": "Beyaz Antoryum", "description": "Zarif beyaz antoryum seramik saksıda", "price": 749, "category": "antoryum", "image": "https://images.unsplash.com/photo-1596438459194-f275f413d6ff?w=400&h=400&fit=crop", "is_bestseller": False, "badge": "Aynı Gün Teslimat", "created_at": datetime.now(timezone.utc).isoformat()},
+    ]
+    
+    # Products - Kokina
+    kokina_products = [
+        {"id": str(uuid.uuid4()), "title": "Kokina Aranjmanı", "description": "Yeni yıla özel kokina düzenlemesi", "price": 899, "category": "kokina", "image": "https://images.unsplash.com/photo-1512418490979-92798cec1380?w=400&h=400&fit=crop", "is_bestseller": True, "badge": "Yeni Yıl Özel", "created_at": datetime.now(timezone.utc).isoformat()},
+        {"id": str(uuid.uuid4()), "title": "Lüks Kokina Sepeti", "description": "Premium kokina sepet aranjmanı", "price": 1299, "category": "kokina", "image": "https://images.unsplash.com/photo-1482517967863-00e15c9b44be?w=400&h=400&fit=crop", "is_bestseller": False, "badge": "Premium", "created_at": datetime.now(timezone.utc).isoformat()},
+    ]
+    
+    # Products - Lilyum
+    lilyum_products = [
+        {"id": str(uuid.uuid4()), "title": "Beyaz Lilyum Buketi", "description": "Mis kokulu beyaz lilyumlar", "price": 649, "category": "lilyum", "image": "https://images.unsplash.com/photo-1468327768560-75b778cbb551?w=400&h=400&fit=crop", "is_bestseller": False, "badge": "Aynı Gün Teslimat", "created_at": datetime.now(timezone.utc).isoformat()},
+        {"id": str(uuid.uuid4()), "title": "Pembe Lilyum", "description": "Zarif pembe lilyum aranjmanı", "price": 699, "category": "lilyum", "image": "https://images.unsplash.com/photo-1508610048659-a06b669e3321?w=400&h=400&fit=crop", "is_bestseller": False, "badge": "Aynı Gün Teslimat", "created_at": datetime.now(timezone.utc).isoformat()},
+    ]
+    
+    # Products - Ayçiçeği
+    aycicegi_products = [
+        {"id": str(uuid.uuid4()), "title": "Ayçiçeği Buketi", "description": "Neşeli ayçiçeği buketi", "price": 449, "category": "aycicegi", "image": "https://images.unsplash.com/photo-1551731409-43eb3e517a1a?w=400&h=400&fit=crop", "is_bestseller": False, "badge": "Aynı Gün Teslimat", "created_at": datetime.now(timezone.utc).isoformat()},
+        {"id": str(uuid.uuid4()), "title": "Güneş Sepeti", "description": "Ayçiçeği ve mevsim çiçekleri sepeti", "price": 599, "category": "aycicegi", "image": "https://images.unsplash.com/photo-1557844352-761f2565b576?w=400&h=400&fit=crop", "is_bestseller": False, "badge": "Aynı Gün Teslimat", "created_at": datetime.now(timezone.utc).isoformat()},
+    ]
+    
+    # Products - Çiçek Buketleri
+    buket_products = [
+        {"id": str(uuid.uuid4()), "title": "Karışık Buket", "description": "Mevsim çiçeklerinden renkli buket", "price": 499, "category": "cicek-buketleri", "image": "https://images.unsplash.com/photo-1561181286-d3fee7d55364?w=400&h=400&fit=crop", "is_bestseller": False, "badge": "Aynı Gün Teslimat", "created_at": datetime.now(timezone.utc).isoformat()},
+        {"id": str(uuid.uuid4()), "title": "Romantik Buket", "description": "Aşka özel romantik çiçek buketi", "price": 699, "category": "cicek-buketleri", "image": "https://images.unsplash.com/photo-1487530811176-3780de880c2d?w=400&h=400&fit=crop", "is_bestseller": False, "badge": "Aynı Gün Teslimat", "created_at": datetime.now(timezone.utc).isoformat()},
+    ]
+    
+    # Products - Saksı Çiçekleri
+    saksi_products = [
+        {"id": str(uuid.uuid4()), "title": "Bonsai Ağacı", "description": "Şık bonsai ağacı seramik saksıda", "price": 899, "category": "saksi-cicekleri", "image": "https://images.unsplash.com/photo-1567331711402-509c12c41959?w=400&h=400&fit=crop", "is_bestseller": False, "badge": "Aynı Gün Teslimat", "created_at": datetime.now(timezone.utc).isoformat()},
+        {"id": str(uuid.uuid4()), "title": "Sukulent Set", "description": "3'lü sukulent bitki seti", "price": 399, "category": "saksi-cicekleri", "image": "https://images.unsplash.com/photo-1459411552884-841db9b3cc2a?w=400&h=400&fit=crop", "is_bestseller": False, "badge": "Aynı Gün Teslimat", "created_at": datetime.now(timezone.utc).isoformat()},
+    ]
+    
+    all_products = gul_products + orkide_products + tasarim_products + papatya_products + antoryum_products + kokina_products + lilyum_products + aycicegi_products + buket_products + saksi_products
     await db.products.insert_many(all_products)
     
     return {
