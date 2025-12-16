@@ -296,85 +296,8 @@ async def seed_database():
         {"id": str(uuid.uuid4()), "title": "Sukulent Set", "description": "3'lü sukulent bitki seti", "price": 399, "category": "saksi-cicekleri", "image": "https://images.unsplash.com/photo-1459411552884-841db9b3cc2a?w=400&h=400&fit=crop", "is_bestseller": False, "badge": "Aynı Gün Teslimat", "created_at": datetime.now(timezone.utc).isoformat()},
     ]
     
-    # More products to reach 50+
-    extra_products = []
-    
-    # More Güller
-    gul_extras = [
-        {"title": "7 Kırmızı Gül", "price": 349, "category": "gul"},
-        {"title": "21 Kırmızı Gül Buketi", "price": 799, "category": "gul"},
-        {"title": "31 Kırmızı Gül Sepeti", "price": 1199, "category": "gul"},
-        {"title": "51 Kırmızı Gül", "price": 1899, "category": "gul"},
-        {"title": "101 Kırmızı Gül", "price": 3499, "category": "gul"},
-        {"title": "Pembe Gül Sepeti", "price": 699, "category": "gul"},
-        {"title": "Beyaz Gül Sepeti", "price": 699, "category": "gul"},
-        {"title": "Renkli Gül Aranjmanı", "price": 799, "category": "gul"},
-    ]
-    
-    # More Orkide
-    orkide_extras = [
-        {"title": "3 Dallı Beyaz Orkide", "price": 1799, "category": "orkide"},
-        {"title": "5 Dallı Mor Orkide", "price": 2499, "category": "orkide"},
-        {"title": "Mini Orkide", "price": 599, "category": "orkide"},
-        {"title": "Jumbo Orkide", "price": 1999, "category": "orkide"},
-    ]
-    
-    # Lilyum
-    lilyum_extras = [
-        {"title": "Pembe Lilyum Buketi", "price": 599, "category": "lilyum"},
-        {"title": "Beyaz Lilyum Sepeti", "price": 799, "category": "lilyum"},
-        {"title": "Karışık Lilyum", "price": 699, "category": "lilyum"},
-    ]
-    
-    # Ayçiçeği
-    aycicegi_extras = [
-        {"title": "5 Ayçiçeği", "price": 399, "category": "aycicegi"},
-        {"title": "10 Ayçiçeği Buketi", "price": 599, "category": "aycicegi"},
-        {"title": "Ayçiçeği Sepeti", "price": 699, "category": "aycicegi"},
-    ]
-    
-    # Papatya
-    papatya_extras = [
-        {"title": "Beyaz Papatya Buketi", "price": 349, "category": "papatya-gerbera"},
-        {"title": "Renkli Gerbera", "price": 449, "category": "papatya-gerbera"},
-        {"title": "Papatya Sepeti", "price": 499, "category": "papatya-gerbera"},
-    ]
-    
-    # Tasarım
-    tasarim_extras = [
-        {"title": "Özel Tasarım Buket", "price": 899, "category": "tasarim"},
-        {"title": "Lüks Aranjman", "price": 1299, "category": "tasarim"},
-        {"title": "Minimalist Tasarım", "price": 599, "category": "tasarim"},
-        {"title": "Bohem Aranjman", "price": 749, "category": "tasarim"},
-    ]
-    
-    # Saksı
-    saksi_extras = [
-        {"title": "Zamioculcas", "price": 499, "category": "saksi-cicekleri"},
-        {"title": "Monstera", "price": 699, "category": "saksi-cicekleri"},
-        {"title": "Ficus Elastica", "price": 549, "category": "saksi-cicekleri"},
-        {"title": "Kaktüs Set", "price": 299, "category": "saksi-cicekleri"},
-    ]
-    
-    # Çiçek Buketleri
-    buket_extras = [
-        {"title": "Mevsim Buketi", "price": 449, "category": "cicek-buketleri"},
-        {"title": "Kır Çiçekleri", "price": 399, "category": "cicek-buketleri"},
-        {"title": "Premium Buket", "price": 999, "category": "cicek-buketleri"},
-        {"title": "Özel Gün Buketi", "price": 599, "category": "cicek-buketleri"},
-    ]
-    
-    # Kokina
-    kokina_extras = [
-        {"title": "Mini Kokina", "price": 499, "category": "kokina"},
-        {"title": "Kokina Sepeti", "price": 799, "category": "kokina"},
-    ]
-    
-    # Antoryum
-    antoryum_extras = [
-        {"title": "Pembe Antoryum", "price": 799, "category": "antoryum"},
-        {"title": "Antoryum Aranjmanı", "price": 999, "category": "antoryum"},
-    ]
+    # Generate ~1000 products
+    import random
     
     images = [
         "https://images.unsplash.com/photo-1518621736915-f3b1c41bfd00?w=400&h=400&fit=crop",
@@ -387,22 +310,73 @@ async def seed_database():
         "https://images.unsplash.com/photo-1520763185298-1b434c919102?w=400&h=400&fit=crop",
         "https://images.unsplash.com/photo-1490750967868-88aa4486c946?w=400&h=400&fit=crop",
         "https://images.unsplash.com/photo-1551731409-43eb3e517a1a?w=400&h=400&fit=crop",
+        "https://images.unsplash.com/photo-1487530811176-3780de880c2d?w=400&h=400&fit=crop",
+        "https://images.unsplash.com/photo-1561181286-d3fee7d55364?w=400&h=400&fit=crop",
+        "https://images.unsplash.com/photo-1525310072745-f49212b5ac6d?w=400&h=400&fit=crop",
+        "https://images.unsplash.com/photo-1598880940371-c756e015fea1?w=400&h=400&fit=crop",
+        "https://images.unsplash.com/photo-1468327768560-75b778cbb551?w=400&h=400&fit=crop",
+        "https://images.unsplash.com/photo-1508610048659-a06b669e3321?w=400&h=400&fit=crop",
+        "https://images.unsplash.com/photo-1518882605630-8eb573696572?w=400&h=400&fit=crop",
+        "https://images.unsplash.com/photo-1586968304848-f29e3c95cb2c?w=400&h=400&fit=crop",
+        "https://images.unsplash.com/photo-1548586196-aa5803b77379?w=400&h=400&fit=crop",
+        "https://images.unsplash.com/photo-1566873535350-a3f5d4a804b7?w=400&h=400&fit=crop",
     ]
     
-    all_extras = gul_extras + orkide_extras + lilyum_extras + aycicegi_extras + papatya_extras + tasarim_extras + saksi_extras + buket_extras + kokina_extras + antoryum_extras
+    product_templates = [
+        # Güller
+        {"names": ["Kırmızı Gül", "Pembe Gül", "Beyaz Gül", "Sarı Gül", "Turuncu Gül", "Mor Gül"], "category": "gul", "suffix": ["Buketi", "Sepeti", "Aranjmanı", "Kutusu"]},
+        {"names": ["7'li Gül", "11'li Gül", "21'li Gül", "31'li Gül", "51'li Gül", "101'li Gül"], "category": "gul", "suffix": ["Buketi", "Sepeti"]},
+        # Orkide
+        {"names": ["Beyaz Orkide", "Mor Orkide", "Pembe Orkide", "Sarı Orkide", "Mini Orkide", "Jumbo Orkide"], "category": "orkide", "suffix": ["Tek Dal", "Çift Dal", "3 Dal", "5 Dal"]},
+        # Lilyum
+        {"names": ["Beyaz Lilyum", "Pembe Lilyum", "Sarı Lilyum", "Turuncu Lilyum"], "category": "lilyum", "suffix": ["Buketi", "Sepeti", "Aranjmanı"]},
+        # Ayçiçeği
+        {"names": ["Ayçiçeği", "Güneş Çiçeği"], "category": "aycicegi", "suffix": ["Buketi", "Sepeti", "5'li", "10'lu", "15'li"]},
+        # Papatya/Gerbera
+        {"names": ["Papatya", "Gerbera", "Renkli Gerbera", "Beyaz Papatya"], "category": "papatya-gerbera", "suffix": ["Buketi", "Sepeti", "Aranjmanı"]},
+        # Tasarım
+        {"names": ["Tasarım", "Butik", "Özel", "Premium", "Lüks", "Minimalist", "Modern", "Vintage", "Bohem"], "category": "tasarim", "suffix": ["Aranjman", "Buket", "Sepet", "Kutu"]},
+        # Saksı
+        {"names": ["Orkide Saksı", "Bonsai", "Sukulent", "Kaktüs", "Monstera", "Zamioculcas", "Ficus", "Pothos"], "category": "saksi-cicekleri", "suffix": ["", "Seti", "Koleksiyonu"]},
+        # Antoryum
+        {"names": ["Kırmızı Antoryum", "Beyaz Antoryum", "Pembe Antoryum"], "category": "antoryum", "suffix": ["", "Aranjmanı", "Saksıda"]},
+        # Kokina
+        {"names": ["Kokina", "Atatürk Çiçeği"], "category": "kokina", "suffix": ["", "Aranjmanı", "Sepeti", "Mini"]},
+        # Karanfil
+        {"names": ["Kırmızı Karanfil", "Beyaz Karanfil", "Pembe Karanfil", "Renkli Karanfil"], "category": "karanfil", "suffix": ["Buketi", "Sepeti"]},
+        # Hüsnüyusuf
+        {"names": ["Hüsnüyusuf", "Leylak"], "category": "husnuyusuf", "suffix": ["Buketi", "Aranjmanı"]},
+        # Çiçek Buketleri
+        {"names": ["Mevsim Çiçekleri", "Kır Çiçekleri", "Romantik", "Sevgi", "Aşk", "Özel Gün"], "category": "cicek-buketleri", "suffix": ["Buketi", "Sepeti", "Aranjmanı"]},
+    ]
     
-    for i, p in enumerate(all_extras):
-        extra_products.append({
-            "id": str(uuid.uuid4()),
-            "title": p["title"],
-            "description": f"{p['title']} - Özenle hazırlanmış taze çiçekler",
-            "price": p["price"],
-            "category": p["category"],
-            "image": images[i % len(images)],
-            "is_bestseller": False,
-            "badge": "Aynı Gün Teslimat",
-            "created_at": datetime.now(timezone.utc).isoformat()
-        })
+    badges = ["Aynı Gün Teslimat", "Hızlı Teslimat", "Özel Fiyat", "Çok Satan", "Yeni", "Premium"]
+    
+    extra_products = []
+    product_id = 1
+    
+    for template in product_templates:
+        for name in template["names"]:
+            for suffix in template["suffix"]:
+                for i in range(3):  # Her kombinasyon için 3 varyasyon
+                    title = f"{name} {suffix}".strip()
+                    if i > 0:
+                        title = f"{title} #{i+1}"
+                    
+                    price = random.randint(29, 299) * 10 + 9  # 299 - 2999 arası
+                    
+                    extra_products.append({
+                        "id": str(uuid.uuid4()),
+                        "title": title,
+                        "description": f"{title} - Özenle hazırlanmış taze çiçekler ile sevdiklerinizi mutlu edin",
+                        "price": price,
+                        "category": template["category"],
+                        "image": images[product_id % len(images)],
+                        "is_bestseller": random.random() < 0.1,
+                        "badge": random.choice(badges),
+                        "created_at": datetime.now(timezone.utc).isoformat()
+                    })
+                    product_id += 1
     
     all_products = gul_products + orkide_products + tasarim_products + papatya_products + antoryum_products + kokina_products + lilyum_products + aycicegi_products + buket_products + saksi_products + extra_products
     await db.products.insert_many(all_products)
