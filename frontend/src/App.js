@@ -1261,7 +1261,6 @@ const Layout = ({ children, categories }) => {
 
 // ===== APP =====
 function App() {
-  const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [banners, setBanners] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -1274,13 +1273,11 @@ function App() {
         // Ignore seed errors
       }
 
-      const [productsRes, categoriesRes, bannersRes] = await Promise.all([
-        axios.get(`${API}/products`),
+      const [categoriesRes, bannersRes] = await Promise.all([
         axios.get(`${API}/categories`),
         axios.get(`${API}/banners`),
       ]);
 
-      setProducts(productsRes.data);
       setCategories(categoriesRes.data);
       setBanners(bannersRes.data);
     } catch (e) {
@@ -1314,10 +1311,10 @@ function App() {
       <BrowserRouter>
         <Layout categories={categories}>
           <Routes>
-            <Route path="/" element={<HomePage products={products} banners={banners} categories={categories} />} />
-            <Route path="/kategori/:slug" element={<CategoryPage products={products} categories={categories} />} />
-            <Route path="/urun/:id" element={<ProductDetailPage products={products} categories={categories} />} />
-            <Route path="/ara" element={<SearchResultsPage products={products} />} />
+            <Route path="/" element={<HomePage banners={banners} categories={categories} />} />
+            <Route path="/kategori/:slug" element={<CategoryPage categories={categories} />} />
+            <Route path="/urun/:id" element={<ProductDetailPage categories={categories} />} />
+            <Route path="/ara" element={<SearchResultsPage />} />
             <Route path="/hakkimizda" element={<AboutPage />} />
           </Routes>
         </Layout>
