@@ -425,7 +425,7 @@ const Footer = () => {
         {/* Copyright */}
         <div className="mt-8 pt-8 border-t border-gray-200 text-center">
           <p className="text-gray-500 text-sm">
-            © {new Date().getFullYear()} ÇiçekZamanı. Tüm hakları saklıdır.
+            © {new Date().getFullYear()} Çiçekçi Burada. Tüm hakları saklıdır.
           </p>
         </div>
       </div>
