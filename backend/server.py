@@ -387,18 +387,18 @@ async def seed_database():
     if existing_products > 0:
         return {"message": "Veritabanı zaten dolu", "products_count": existing_products}
     
-    # Categories
+    # Categories (Scraper kategorileriyle uyumlu)
     categories_data = [
         {"id": str(uuid.uuid4()), "name": "Kokina", "slug": "kokina", "description": "Yeni yılın gözdesi", "icon": "🎄"},
-        {"id": str(uuid.uuid4()), "name": "Doğum Günü", "slug": "dogum-gunu", "description": "Özel günler için", "icon": "🎂"},
-        {"id": str(uuid.uuid4()), "name": "Sevgi & Aşk", "slug": "sevgi-ask", "description": "Aşkınızı çiçeklerle ifade edin", "icon": "❤️"},
+        {"id": str(uuid.uuid4()), "name": "Doğum Günü Çiçekleri", "slug": "dogum-gunu", "description": "Özel günler için", "icon": "🎂"},
+        {"id": str(uuid.uuid4()), "name": "Sevgiliye Çiçek", "slug": "sevgi-ask", "description": "Aşkınızı çiçeklerle ifade edin", "icon": "❤️"},
         {"id": str(uuid.uuid4()), "name": "Çiçek Buketleri", "slug": "cicek-buketleri", "description": "Her ocasyon için buketler", "icon": "💐"},
         {"id": str(uuid.uuid4()), "name": "Saksı Çiçekleri", "slug": "saksi-cicekleri", "description": "Kalıcı saksı bitkileri", "icon": "🪴"},
-        {"id": str(uuid.uuid4()), "name": "Yeni İş / Terfi", "slug": "yeni-is-terfi", "description": "Başarıları kutlayın", "icon": "🎊"},
+        {"id": str(uuid.uuid4()), "name": "Yeni İşe Çiçek", "slug": "yeni-is-terfi", "description": "Başarıları kutlayın", "icon": "🎊"},
         {"id": str(uuid.uuid4()), "name": "Orkide", "slug": "orkide", "description": "Şık, zarif ve kalıcı hediye", "icon": "🌸"},
-        {"id": str(uuid.uuid4()), "name": "Geçmiş Olsun", "slug": "gecmis-olsun", "description": "Sevdiklerinize şifa dileyin", "icon": "💐"},
-        {"id": str(uuid.uuid4()), "name": "Gül Çeşitleri", "slug": "gul", "description": "Aşkın en klasik hali", "icon": "🌹"},
-        {"id": str(uuid.uuid4()), "name": "Açılış / Kutlama", "slug": "acilis-kutlama", "description": "Açılış ve kutlamalar için", "icon": "🎉"},
+        {"id": str(uuid.uuid4()), "name": "Geçmiş Olsun Çiçekleri", "slug": "gecmis-olsun", "description": "Sevdiklerinize şifa dileyin", "icon": "💐"},
+        {"id": str(uuid.uuid4()), "name": "Gül", "slug": "gul", "description": "Aşkın en klasik hali", "icon": "🌹"},
+        {"id": str(uuid.uuid4()), "name": "Açılış Tören Çiçekleri", "slug": "acilis-kutlama", "description": "Açılış ve kutlamalar için", "icon": "🎉"},
         {"id": str(uuid.uuid4()), "name": "Çelenk", "slug": "celenk", "description": "Cenaze ve anma çelenkleri", "icon": "🕊️"},
         {"id": str(uuid.uuid4()), "name": "Yeni Bebek", "slug": "dogum-yeni-bebek", "description": "Yeni hayatı kutlayın", "icon": "👶"},
         {"id": str(uuid.uuid4()), "name": "Ayçiçeği", "slug": "aycicegi", "description": "Güneş gibi parlak", "icon": "🌻"},
