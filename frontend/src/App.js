@@ -913,8 +913,21 @@ const ProductDetailPage = ({ categories }) => {
     "Konak, İzmir", "Karşıyaka, İzmir", "Bornova, İzmir", "Buca, İzmir", "Bayraklı, İzmir",
   ];
 
+  // Türkçe karakter dönüşümü
+  const normalizeText = (text) => {
+    return text
+      .toLowerCase()
+      .replace(/ı/g, 'i')
+      .replace(/ğ/g, 'g')
+      .replace(/ü/g, 'u')
+      .replace(/ş/g, 's')
+      .replace(/ö/g, 'o')
+      .replace(/ç/g, 'c')
+      .replace(/İ/g, 'i');
+  };
+
   const filteredLocations = location.length >= 2
-    ? turkeyProvinces.filter(loc => loc.toLowerCase().includes(location.toLowerCase())).slice(0, 8)
+    ? turkeyProvinces.filter(loc => normalizeText(loc).includes(normalizeText(location))).slice(0, 8)
     : [];
 
   // Calendar rendering
