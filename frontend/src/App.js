@@ -707,7 +707,6 @@ const AboutPage = () => (
 // ===== MAIN LAYOUT =====
 const Layout = ({ children, categories }) => (
   <div className="min-h-screen bg-gray-50 flex flex-col">
-    <TopHeader />
     <MainHeader />
     <CategoryNavBar categories={categories} />
     <main className="flex-1">
