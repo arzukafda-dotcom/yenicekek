@@ -1053,27 +1053,17 @@ const ProductDetailPage = ({ categories }) => {
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-green-500"
                   data-testid="location-input"
                 />
-                {(location.length >= 2) && (locationLoading || filteredLocations.length > 0) && (
+                {showLocationDropdown && filteredLocations.length > 0 && (
                   <div className="absolute top-full left-0 right-0 bg-white border border-gray-200 rounded-lg shadow-lg mt-1 z-10 max-h-64 overflow-auto">
-                    {locationLoading ? (
-                      <div className="px-4 py-3 text-gray-500 text-center">
-                        <span className="inline-block animate-spin mr-2">⏳</span>
-                        Aranıyor...
-                      </div>
-                    ) : (
-                      filteredLocations.map((loc, idx) => (
-                        <button
-                          key={idx}
-                          onClick={() => { setLocation(loc.display_name); setLocationResults([]); }}
-                          className="w-full text-left px-4 py-3 hover:bg-green-50 border-b border-gray-100 last:border-0"
-                        >
-                          <div className="font-medium text-gray-900">{loc.name || loc.display_name.split(',')[0]}</div>
-                          <div className="text-sm text-gray-500">
-                            {loc.district && `${loc.district}, `}{loc.city}
-                          </div>
-                        </button>
-                      ))
-                    )}
+                    {filteredLocations.map((loc, idx) => (
+                      <button
+                        key={idx}
+                        onClick={() => { setLocation(loc); setShowLocationDropdown(false); }}
+                        className="w-full text-left px-4 py-3 hover:bg-green-50 border-b border-gray-100 last:border-0 text-gray-700"
+                      >
+                        📍 {loc}
+                      </button>
+                    ))}
                   </div>
                 )}
               </div>
