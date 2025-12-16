@@ -1067,7 +1067,6 @@ const ProductDetailPage = ({ categories }) => {
                   value={location}
                   onChange={(e) => { setLocation(e.target.value); setShowLocationDropdown(true); }}
                   onFocus={() => setShowLocationDropdown(true)}
-                  onBlur={() => setTimeout(() => setShowLocationDropdown(false), 200)}
                   placeholder="Gönderim yeri yazın"
                   className="w-full pl-12 pr-4 py-4 border-2 border-red-400 rounded-lg focus:outline-none focus:border-red-500 text-gray-800"
                   data-testid="location-input"
