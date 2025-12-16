@@ -893,96 +893,46 @@ const ProductDetailPage = ({ categories }) => {
   
   const timeSlots = ['09:00 - 12:00', '12:00 - 15:00', '15:00 - 18:00', '18:00 - 21:00'];
   
-  // Location database - mahalle/ilçe/il formatında
-  const locationDatabase = [
-    // İstanbul
-    { name: "Yenikapı", district: "Fatih", city: "İstanbul" },
-    { name: "Yenibosna Merkez", district: "Bahçelievler", city: "İstanbul" },
-    { name: "Yeniköy", district: "Sarıyer", city: "İstanbul" },
-    { name: "Kadıköy Merkez", district: "Kadıköy", city: "İstanbul" },
-    { name: "Moda", district: "Kadıköy", city: "İstanbul" },
-    { name: "Fenerbahçe", district: "Kadıköy", city: "İstanbul" },
-    { name: "Beşiktaş Merkez", district: "Beşiktaş", city: "İstanbul" },
-    { name: "Levent", district: "Beşiktaş", city: "İstanbul" },
-    { name: "Etiler", district: "Beşiktaş", city: "İstanbul" },
-    { name: "Bebek", district: "Beşiktaş", city: "İstanbul" },
-    { name: "Şişli Merkez", district: "Şişli", city: "İstanbul" },
-    { name: "Mecidiyeköy", district: "Şişli", city: "İstanbul" },
-    { name: "Nişantaşı", district: "Şişli", city: "İstanbul" },
-    { name: "Taksim", district: "Beyoğlu", city: "İstanbul" },
-    { name: "Cihangir", district: "Beyoğlu", city: "İstanbul" },
-    { name: "Karaköy", district: "Beyoğlu", city: "İstanbul" },
-    { name: "Bakırköy Merkez", district: "Bakırköy", city: "İstanbul" },
-    { name: "Ataköy", district: "Bakırköy", city: "İstanbul" },
-    { name: "Florya", district: "Bakırköy", city: "İstanbul" },
-    { name: "Bağdat Caddesi", district: "Kadıköy", city: "İstanbul" },
-    { name: "Suadiye", district: "Kadıköy", city: "İstanbul" },
-    { name: "Ümraniye Merkez", district: "Ümraniye", city: "İstanbul" },
-    { name: "Üsküdar Merkez", district: "Üsküdar", city: "İstanbul" },
-    { name: "Çengelköy", district: "Üsküdar", city: "İstanbul" },
-    { name: "Maltepe Merkez", district: "Maltepe", city: "İstanbul" },
-    { name: "Pendik Merkez", district: "Pendik", city: "İstanbul" },
-    { name: "Kartal Merkez", district: "Kartal", city: "İstanbul" },
-    { name: "Sultanahmet", district: "Fatih", city: "İstanbul" },
-    { name: "Aksaray", district: "Fatih", city: "İstanbul" },
-    { name: "Beylikdüzü Merkez", district: "Beylikdüzü", city: "İstanbul" },
-    { name: "Esenyurt Merkez", district: "Esenyurt", city: "İstanbul" },
-    { name: "Başakşehir Merkez", district: "Başakşehir", city: "İstanbul" },
-    // Ankara
-    { name: "Yenimahalle Merkez", district: "Yenimahalle", city: "Ankara" },
-    { name: "Çankaya Merkez", district: "Çankaya", city: "Ankara" },
-    { name: "Kızılay", district: "Çankaya", city: "Ankara" },
-    { name: "Tunalı Hilmi", district: "Çankaya", city: "Ankara" },
-    { name: "Bahçelievler", district: "Çankaya", city: "Ankara" },
-    { name: "Keçiören Merkez", district: "Keçiören", city: "Ankara" },
-    { name: "Mamak Merkez", district: "Mamak", city: "Ankara" },
-    { name: "Etimesgut Merkez", district: "Etimesgut", city: "Ankara" },
-    { name: "Ulus", district: "Altındağ", city: "Ankara" },
-    // İzmir
-    { name: "Konak Merkez", district: "Konak", city: "İzmir" },
-    { name: "Alsancak", district: "Konak", city: "İzmir" },
-    { name: "Karşıyaka Merkez", district: "Karşıyaka", city: "İzmir" },
-    { name: "Bornova Merkez", district: "Bornova", city: "İzmir" },
-    { name: "Buca Merkez", district: "Buca", city: "İzmir" },
-    { name: "Bayraklı Merkez", district: "Bayraklı", city: "İzmir" },
-    // Antalya
-    { name: "Konyaaltı", district: "Konyaaltı", city: "Antalya" },
-    { name: "Lara", district: "Muratpaşa", city: "Antalya" },
-    { name: "Kaleiçi", district: "Muratpaşa", city: "Antalya" },
-    // Bursa
-    { name: "Nilüfer Merkez", district: "Nilüfer", city: "Bursa" },
-    { name: "Osmangazi Merkez", district: "Osmangazi", city: "Bursa" },
-    // Diğer iller
-    { name: "Adana Merkez", district: "Seyhan", city: "Adana" },
-    { name: "Gaziantep Merkez", district: "Şahinbey", city: "Gaziantep" },
-    { name: "Konya Merkez", district: "Selçuklu", city: "Konya" },
-    { name: "Mersin Merkez", district: "Yenişehir", city: "Mersin" },
-    { name: "Kayseri Merkez", district: "Melikgazi", city: "Kayseri" },
-    { name: "Eskişehir Merkez", district: "Tepebaşı", city: "Eskişehir" },
-    { name: "Diyarbakır Merkez", district: "Bağlar", city: "Diyarbakır" },
-    { name: "Samsun Merkez", district: "İlkadım", city: "Samsun" },
-    { name: "Denizli Merkez", district: "Pamukkale", city: "Denizli" },
-    { name: "Trabzon Merkez", district: "Ortahisar", city: "Trabzon" },
-  ];
+  // Location search state - API ile gerçek arama
+  const [locationResults, setLocationResults] = useState([]);
+  const [locationLoading, setLocationLoading] = useState(false);
+  const locationSearchRef = useRef(null);
 
-  // Türkçe karakter normalizasyonu
-  const normalizeText = (text) => {
-    return text.toLowerCase()
-      .replace(/ı/g, 'i').replace(/İ/g, 'i')
-      .replace(/ğ/g, 'g').replace(/Ğ/g, 'g')
-      .replace(/ü/g, 'u').replace(/Ü/g, 'u')
-      .replace(/ş/g, 's').replace(/Ş/g, 's')
-      .replace(/ö/g, 'o').replace(/Ö/g, 'o')
-      .replace(/ç/g, 'c').replace(/Ç/g, 'c');
-  };
+  // Location search with Photon/Nominatim API
+  useEffect(() => {
+    if (locationSearchRef.current) {
+      clearTimeout(locationSearchRef.current);
+    }
 
-  const filteredLocations = location.length >= 2
-    ? locationDatabase.filter(loc => {
-        const searchText = normalizeText(location);
-        const locText = normalizeText(`${loc.name} ${loc.district} ${loc.city}`);
-        return locText.includes(searchText);
-      }).slice(0, 5)
-    : [];
+    if (location.length >= 2 && showLocationDropdown) {
+      setLocationLoading(true);
+      locationSearchRef.current = setTimeout(async () => {
+        try {
+          const res = await axios.get(`${API}/locations/search?q=${encodeURIComponent(location)}`);
+          if (res.data.results) {
+            setLocationResults(res.data.results);
+          } else {
+            setLocationResults([]);
+          }
+        } catch (e) {
+          console.error('Location search error:', e);
+          setLocationResults([]);
+        }
+        setLocationLoading(false);
+      }, 300); // 300ms debounce
+    } else {
+      setLocationResults([]);
+      setLocationLoading(false);
+    }
+
+    return () => {
+      if (locationSearchRef.current) {
+        clearTimeout(locationSearchRef.current);
+      }
+    };
+  }, [location, showLocationDropdown]);
+
+  const filteredLocations = locationResults;
 
   // Calendar rendering
   const renderCalendar = () => {
