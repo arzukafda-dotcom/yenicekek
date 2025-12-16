@@ -1168,14 +1168,16 @@ const ProductDetailPage = ({ categories }) => {
         </div>
 
         {/* Best Sellers Section */}
-        <div className="mt-8">
-          <h2 className="text-xl font-bold text-gray-900 mb-4">En Çok Satanlar</h2>
-          <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide">
-            {products.filter(p => p.is_bestseller && p.id !== product.id).slice(0, 6).map((p) => (
-              <ProductCard key={p.id} product={p} />
-            ))}
+        {relatedProducts.length > 0 && (
+          <div className="mt-8">
+            <h2 className="text-xl font-bold text-gray-900 mb-4">En Çok Satanlar</h2>
+            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+              {relatedProducts.slice(0, 6).map((p) => (
+                <ProductCard key={p.id} product={p} />
+              ))}
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );
