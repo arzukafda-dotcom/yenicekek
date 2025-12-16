@@ -201,23 +201,12 @@ const CircularCategories = ({ categories }) => {
   };
 
   return (
-    <div className="bg-white py-4 border-b border-gray-100 relative">
+    <div className="bg-white py-4 border-b border-gray-100">
       <div className="w-full px-4">
-        {/* Left Arrow */}
-        <button 
-          onClick={() => scroll('left')}
-          className="absolute left-2 top-1/2 -translate-y-1/2 z-10 w-8 h-8 bg-white shadow-md rounded-full flex items-center justify-center hover:bg-gray-50 transition-colors"
-          data-testid="scroll-left-btn"
-        >
-          <svg viewBox="0 0 24 24" className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M15 18l-6-6 6-6"/>
-          </svg>
-        </button>
-
-        {/* Categories */}
+        {/* Categories - scrollable with touch on mobile */}
         <div 
           ref={scrollRef}
-          className="flex items-start justify-center gap-8 overflow-x-auto scrollbar-hide px-8"
+          className="flex items-start gap-6 md:gap-8 overflow-x-auto scrollbar-hide md:justify-center"
         >
           {displayCategories.map((cat, idx) => (
             <Link
@@ -239,17 +228,6 @@ const CircularCategories = ({ categories }) => {
             </Link>
           ))}
         </div>
-
-        {/* Right Arrow */}
-        <button 
-          onClick={() => scroll('right')}
-          className="absolute right-2 top-1/2 -translate-y-1/2 z-10 w-8 h-8 bg-white shadow-md rounded-full flex items-center justify-center hover:bg-gray-50 transition-colors"
-          data-testid="scroll-right-btn"
-        >
-          <svg viewBox="0 0 24 24" className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M9 18l6-6-6-6"/>
-          </svg>
-        </button>
       </div>
     </div>
   );
