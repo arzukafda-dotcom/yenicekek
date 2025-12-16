@@ -893,39 +893,99 @@ const ProductDetailPage = ({ categories }) => {
   
   const timeSlots = ['09:00 - 12:00', '12:00 - 15:00', '15:00 - 18:00', '18:00 - 21:00'];
   
-  // Location search state - API ile gerçek arama
+  // Location search state - Hibrit: Statik + API
   const [locationResults, setLocationResults] = useState([]);
   const [locationLoading, setLocationLoading] = useState(false);
 
-  // Location search with debounce
+  // Popüler lokasyonlar (anında gösterilir)
+  const popularLocations = [
+    // İstanbul
+    { display_name: "Kadıköy, Kadıköy/İstanbul, Türkiye" },
+    { display_name: "Beşiktaş, Beşiktaş/İstanbul, Türkiye" },
+    { display_name: "Şişli, Şişli/İstanbul, Türkiye" },
+    { display_name: "Bakırköy, Bakırköy/İstanbul, Türkiye" },
+    { display_name: "Üsküdar, Üsküdar/İstanbul, Türkiye" },
+    { display_name: "Ümraniye, Ümraniye/İstanbul, Türkiye" },
+    { display_name: "Maltepe, Maltepe/İstanbul, Türkiye" },
+    { display_name: "Fatih, Fatih/İstanbul, Türkiye" },
+    { display_name: "Beyoğlu, Beyoğlu/İstanbul, Türkiye" },
+    { display_name: "Pendik, Pendik/İstanbul, Türkiye" },
+    { display_name: "Kartal, Kartal/İstanbul, Türkiye" },
+    { display_name: "Sarıyer, Sarıyer/İstanbul, Türkiye" },
+    { display_name: "Beylikdüzü, Beylikdüzü/İstanbul, Türkiye" },
+    { display_name: "Esenyurt, Esenyurt/İstanbul, Türkiye" },
+    { display_name: "Başakşehir, Başakşehir/İstanbul, Türkiye" },
+    // Ankara
+    { display_name: "Çankaya, Çankaya/Ankara, Türkiye" },
+    { display_name: "Keçiören, Keçiören/Ankara, Türkiye" },
+    { display_name: "Yenimahalle, Yenimahalle/Ankara, Türkiye" },
+    { display_name: "Mamak, Mamak/Ankara, Türkiye" },
+    { display_name: "Etimesgut, Etimesgut/Ankara, Türkiye" },
+    // İzmir
+    { display_name: "Konak, Konak/İzmir, Türkiye" },
+    { display_name: "Karşıyaka, Karşıyaka/İzmir, Türkiye" },
+    { display_name: "Bornova, Bornova/İzmir, Türkiye" },
+    { display_name: "Buca, Buca/İzmir, Türkiye" },
+    // Diğer büyükşehirler
+    { display_name: "Antalya, Muratpaşa/Antalya, Türkiye" },
+    { display_name: "Bursa, Osmangazi/Bursa, Türkiye" },
+    { display_name: "Adana, Seyhan/Adana, Türkiye" },
+    { display_name: "Gaziantep, Şahinbey/Gaziantep, Türkiye" },
+    { display_name: "Konya, Selçuklu/Konya, Türkiye" },
+    { display_name: "Mersin, Yenişehir/Mersin, Türkiye" },
+    { display_name: "Kayseri, Melikgazi/Kayseri, Türkiye" },
+    { display_name: "Eskişehir, Tepebaşı/Eskişehir, Türkiye" },
+    { display_name: "Diyarbakır, Bağlar/Diyarbakır, Türkiye" },
+    { display_name: "Samsun, İlkadım/Samsun, Türkiye" },
+    { display_name: "Denizli, Pamukkale/Denizli, Türkiye" },
+    { display_name: "Trabzon, Ortahisar/Trabzon, Türkiye" },
+  ];
+
+  // Türkçe normalize
+  const normalizeText = (text) => text.toLowerCase()
+    .replace(/ı/g, 'i').replace(/İ/g, 'i')
+    .replace(/ğ/g, 'g').replace(/Ğ/g, 'g')
+    .replace(/ü/g, 'u').replace(/Ü/g, 'u')
+    .replace(/ş/g, 's').replace(/Ş/g, 's')
+    .replace(/ö/g, 'o').replace(/Ö/g, 'o')
+    .replace(/ç/g, 'c').replace(/Ç/g, 'c');
+
+  // API search with debounce
   const searchLocation = useCallback(async (query) => {
-    if (query.length < 2) {
+    if (query.length < 2) return;
+    
+    try {
+      const res = await axios.get(`${API}/locations/search?q=${encodeURIComponent(query)}`);
+      if (res.data?.results?.length > 0) {
+        setLocationResults(res.data.results);
+      }
+    } catch (e) {
+      console.error('Location API error:', e);
+    }
+    setLocationLoading(false);
+  }, []);
+
+  // Arama efekti - önce statik sonra API
+  useEffect(() => {
+    if (!showLocationDropdown || location.length < 2) {
       setLocationResults([]);
       setLocationLoading(false);
       return;
     }
-    
-    setLocationLoading(true);
-    try {
-      const res = await axios.get(`${API}/locations/search?q=${encodeURIComponent(query)}`);
-      setLocationResults(res.data?.results || []);
-    } catch (e) {
-      console.error('Location search error:', e);
-      setLocationResults([]);
-    } finally {
-      setLocationLoading(false);
-    }
-  }, []);
 
-  // Debounced search effect
-  useEffect(() => {
+    // Önce statik listeden filtrele (anında)
+    const normalizedQuery = normalizeText(location);
+    const staticResults = popularLocations.filter(loc => 
+      normalizeText(loc.display_name).includes(normalizedQuery)
+    ).slice(0, 5);
+    
+    setLocationResults(staticResults);
+    setLocationLoading(staticResults.length === 0);
+
+    // Sonra API'den zenginleştir (arka planda)
     const timer = setTimeout(() => {
-      if (showLocationDropdown && location.length >= 2) {
-        searchLocation(location);
-      } else {
-        setLocationResults([]);
-      }
-    }, 400);
+      searchLocation(location);
+    }, 500);
     
     return () => clearTimeout(timer);
   }, [location, showLocationDropdown, searchLocation]);
