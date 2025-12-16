@@ -136,40 +136,79 @@ const CategoryNavBar = ({ categories }) => {
 // ===== CIRCULAR CATEGORY ICONS =====
 const CircularCategories = ({ categories }) => {
   const displayCategories = [
-    { name: "Güller", slug: "gul", image: "https://images.unsplash.com/photo-1518621736915-f3b1c41bfd00?w=100&h=100&fit=crop" },
-    { name: "Doğum Günü", slug: "dogum-gunu", image: "https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=100&h=100&fit=crop" },
-    { name: "Sevgi & Aşk", slug: "gul", image: "https://images.unsplash.com/photo-1518882605630-8eb573696572?w=100&h=100&fit=crop" },
-    { name: "Çiçek Buketleri", slug: "tasarim", image: "https://images.unsplash.com/photo-1487530811176-3780de880c2d?w=100&h=100&fit=crop" },
-    { name: "Saksı Çiçekleri", slug: "saksi-cicekleri", image: "https://images.unsplash.com/photo-1459411552884-841db9b3cc2a?w=100&h=100&fit=crop" },
-    { name: "Yeni İş", slug: "tasarim", image: "https://images.unsplash.com/photo-1563241527-3004b7be0ffd?w=100&h=100&fit=crop" },
-    { name: "Orkide", slug: "orkide", image: "https://images.unsplash.com/photo-1567748157439-651aca2ff064?w=100&h=100&fit=crop" },
-    { name: "Geçmiş Olsun", slug: "tasarim", image: "https://images.unsplash.com/photo-1520763185298-1b434c919102?w=100&h=100&fit=crop" },
+    { name: "Kokina", slug: "tasarim", image: "https://images.unsplash.com/photo-1518621736915-f3b1c41bfd00?w=120&h=120&fit=crop" },
+    { name: "Doğum Günü", slug: "dogum-gunu", image: "https://images.unsplash.com/photo-1487530811176-3780de880c2d?w=120&h=120&fit=crop" },
+    { name: "Sevgi & Aşk", slug: "gul", image: "https://images.unsplash.com/photo-1494972308805-463bc619d34e?w=120&h=120&fit=crop" },
+    { name: "Çiçek Buketleri", slug: "tasarim", image: "https://images.unsplash.com/photo-1563241527-3004b7be0ffd?w=120&h=120&fit=crop" },
+    { name: "Saksı Çiçekleri", slug: "orkide", image: "https://images.unsplash.com/photo-1567748157439-651aca2ff064?w=120&h=120&fit=crop" },
+    { name: "Yeni İş", slug: "tasarim", image: "https://images.unsplash.com/photo-1520763185298-1b434c919102?w=120&h=120&fit=crop" },
+    { name: "Orkide", slug: "orkide", image: "https://images.unsplash.com/photo-1610397648930-477b8c7f0943?w=120&h=120&fit=crop" },
+    { name: "Geçmiş Olsun", slug: "papatya-gerbera", image: "https://images.unsplash.com/photo-1525310072745-f49212b5ac6d?w=120&h=120&fit=crop" },
+    { name: "Gül Çeşitleri", slug: "gul", image: "https://images.unsplash.com/photo-1455659817273-f96807779a8a?w=120&h=120&fit=crop" },
   ];
 
+  const scrollRef = useRef(null);
+
+  const scroll = (direction) => {
+    if (scrollRef.current) {
+      const scrollAmount = 200;
+      scrollRef.current.scrollBy({
+        left: direction === 'left' ? -scrollAmount : scrollAmount,
+        behavior: 'smooth'
+      });
+    }
+  };
+
   return (
-    <div className="bg-white py-6 border-b border-gray-100">
+    <div className="bg-white py-4 border-b border-gray-100 relative">
       <div className="max-w-7xl mx-auto px-4">
-        <div className="flex items-center justify-center gap-6 overflow-x-auto pb-2 scrollbar-hide">
+        {/* Left Arrow */}
+        <button 
+          onClick={() => scroll('left')}
+          className="absolute left-2 top-1/2 -translate-y-1/2 z-10 w-8 h-8 bg-white shadow-md rounded-full flex items-center justify-center hover:bg-gray-50 transition-colors"
+          data-testid="scroll-left-btn"
+        >
+          <svg viewBox="0 0 24 24" className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" strokeWidth="2">
+            <path d="M15 18l-6-6 6-6"/>
+          </svg>
+        </button>
+
+        {/* Categories */}
+        <div 
+          ref={scrollRef}
+          className="flex items-start gap-8 overflow-x-auto scrollbar-hide px-8"
+        >
           {displayCategories.map((cat, idx) => (
             <Link
               key={idx}
               to={`/kategori/${cat.slug}`}
-              className="flex flex-col items-center gap-2 min-w-[80px] group"
+              className="flex flex-col items-center gap-2 min-w-[70px] group flex-shrink-0"
               data-testid={`circular-category-${idx}`}
             >
-              <div className="w-16 h-16 md:w-20 md:h-20 rounded-full border-2 border-green-400 overflow-hidden bg-gray-100 group-hover:border-green-600 group-hover:shadow-lg transition-all">
+              <div className="w-[70px] h-[70px] rounded-full border-2 border-red-300 overflow-hidden bg-gray-100 group-hover:border-red-500 group-hover:shadow-lg transition-all p-0.5">
                 <img 
                   src={cat.image} 
                   alt={cat.name}
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-cover rounded-full"
                 />
               </div>
-              <span className="text-xs text-gray-700 text-center font-medium group-hover:text-green-600 transition-colors">
+              <span className="text-xs text-gray-700 text-center font-medium group-hover:text-green-600 transition-colors whitespace-nowrap">
                 {cat.name}
               </span>
             </Link>
           ))}
         </div>
+
+        {/* Right Arrow */}
+        <button 
+          onClick={() => scroll('right')}
+          className="absolute right-2 top-1/2 -translate-y-1/2 z-10 w-8 h-8 bg-white shadow-md rounded-full flex items-center justify-center hover:bg-gray-50 transition-colors"
+          data-testid="scroll-right-btn"
+        >
+          <svg viewBox="0 0 24 24" className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" strokeWidth="2">
+            <path d="M9 18l6-6-6-6"/>
+          </svg>
+        </button>
       </div>
     </div>
   );
