@@ -109,13 +109,22 @@ async def get_status_checks():
     return status_checks
 
 
+# Pagination Response Model
+class PaginatedProducts(BaseModel):
+    products: List[Product]
+    total: int
+    page: int
+    per_page: int
+    total_pages: int
+
+
 # Product Routes
-@api_router.get("/products", response_model=List[Product])
+@api_router.get("/products")
 async def get_products(
     category: Optional[str] = Query(None, description="Filter by category slug"),
     bestseller: Optional[bool] = Query(None, description="Filter bestsellers"),
-    limit: int = Query(50, ge=1, le=100),
-    skip: int = Query(0, ge=0)
+    page: int = Query(1, ge=1, description="Page number"),
+    per_page: int = Query(24, ge=1, le=100, description="Items per page")
 ):
     query = {}
     if category:
@@ -123,13 +132,26 @@ async def get_products(
     if bestseller is not None:
         query["is_bestseller"] = bestseller
     
-    products = await db.products.find(query, {"_id": 0}).skip(skip).limit(limit).to_list(limit)
+    # Get total count
+    total = await db.products.count_documents(query)
+    
+    # Calculate pagination
+    skip = (page - 1) * per_page
+    total_pages = (total + per_page - 1) // per_page  # Ceiling division
+    
+    products = await db.products.find(query, {"_id": 0}).skip(skip).limit(per_page).to_list(per_page)
     
     for p in products:
         if isinstance(p.get('created_at'), str):
             p['created_at'] = datetime.fromisoformat(p['created_at'])
     
-    return products
+    return {
+        "products": products,
+        "total": total,
+        "page": page,
+        "per_page": per_page,
+        "total_pages": total_pages
+    }
 
 @api_router.get("/products/{product_id}", response_model=Product)
 async def get_product(product_id: str):
