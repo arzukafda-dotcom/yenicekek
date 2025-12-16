@@ -1259,7 +1259,7 @@ const AboutPage = () => (
       <div className="bg-white rounded-2xl shadow-sm p-8">
         <p className="text-gray-600 leading-relaxed mb-4">
           Çiçekçi Burada, 2024 yılında kurulmuş online çiçek sipariş platformudur. 
-          Türkiye'nin dört bir yanına aynı gün teslimat garantisi ile en taze çiçekleri ulaştırıyoruz.
+          Türkiye&apos;nin dört bir yanına aynı gün teslimat garantisi ile en taze çiçekleri ulaştırıyoruz.
         </p>
         <p className="text-gray-600 leading-relaxed mb-4">
           Misyonumuz, her özel anınızı çiçeklerle daha da güzelleştirmek. 
