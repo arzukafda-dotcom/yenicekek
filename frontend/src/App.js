@@ -54,22 +54,7 @@ const categoryIcons = {
   "premium": "⭐",
 };
 
-// ===== TOP HEADER =====
-const TopHeader = () => (
-  <div className="bg-white border-b border-gray-100">
-    <div className="max-w-7xl mx-auto px-4 py-2 flex justify-end gap-4">
-      <button className="text-sm text-gray-600 hover:text-green-600 transition-colors" data-testid="login-btn">
-        Üye Girişi
-      </button>
-      <button className="text-sm text-gray-600 hover:text-green-600 transition-colors" data-testid="register-btn">
-        Üye Ol
-      </button>
-      <button className="text-sm text-gray-600 hover:text-green-600 transition-colors" data-testid="order-track-btn">
-        Sipariş Takibi
-      </button>
-    </div>
-  </div>
-);
+// ===== TOP HEADER (Removed as per request) =====
 
 // ===== MAIN HEADER =====
 const MainHeader = ({ onSearch }) => {
