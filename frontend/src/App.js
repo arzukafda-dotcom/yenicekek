@@ -508,7 +508,7 @@ const CategoryPage = ({ products, categories }) => {
 
   return (
     <div className="bg-gray-50 min-h-screen" data-testid="category-page">
-      <div className="max-w-7xl mx-auto px-4 py-8">
+      <div className="w-full px-4 py-8">
         <div className="mb-6">
           <h1 className="text-2xl font-bold text-gray-900">
             {category ? `${categoryIcons[slug] || '🌸'} ${category.name}` : slug === 'tumu' ? '🌸 Tüm Ürünler' : 'Kategori'}
@@ -519,7 +519,7 @@ const CategoryPage = ({ products, categories }) => {
           <p className="text-sm text-gray-400 mt-2">{filteredProducts.length} ürün bulundu</p>
         </div>
         
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
           {filteredProducts.map((product) => (
             <ProductCard key={product.id} product={product} />
           ))}
