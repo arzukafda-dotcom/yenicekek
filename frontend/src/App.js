@@ -578,11 +578,6 @@ const BackToTop = () => {
 
 // ===== HOME PAGE =====
 const HomePage = ({ products, banners, categories }) => {
-  const bestsellers = products.filter(p => p.is_bestseller);
-  const gulProducts = products.filter(p => p.category === 'gul');
-  const orkideProducts = products.filter(p => p.category === 'orkide');
-  const tasarimProducts = products.filter(p => p.category === 'tasarim');
-
   return (
     <div data-testid="home-page">
       <CircularCategories categories={categories} />
@@ -595,41 +590,32 @@ const HomePage = ({ products, banners, categories }) => {
           </div>
         </div>
         
-        {bestsellers.length > 0 && (
-          <ProductSection 
-            title="En Çok Satılanlar" 
-            subtitle="Bu hafta en çok tercih edilen çiçekler"
-            products={bestsellers}
-            viewAllLink="/kategori/tumu"
-          />
-        )}
-        
-        {gulProducts.length > 0 && (
-          <ProductSection 
-            title="Güller" 
-            subtitle="Aşkın en klasik hali"
-            products={gulProducts}
-            viewAllLink="/kategori/gul"
-          />
-        )}
-        
-        {orkideProducts.length > 0 && (
-          <ProductSection 
-            title="Orkideler" 
-            subtitle="Şık, zarif ve kalıcı hediye"
-            products={orkideProducts}
-            viewAllLink="/kategori/orkide"
-          />
-        )}
-        
-        {tasarimProducts.length > 0 && (
-          <ProductSection 
-            title="Tasarım Çiçekler" 
-            subtitle="Özel aranjmanlar ve butik işler"
-            products={tasarimProducts}
-            viewAllLink="/kategori/tasarim"
-          />
-        )}
+        {/* Tüm Çiçekler - Grid */}
+        <section className="py-6" data-testid="section-tum-cicekler">
+          <div className="w-full px-4">
+            <div className="flex items-center justify-between mb-6">
+              <div>
+                <h2 className="text-xl md:text-2xl font-bold text-gray-900">Tüm Çiçekler</h2>
+                <p className="text-gray-500 text-sm mt-1">{products.length} ürün</p>
+              </div>
+              <Link 
+                to="/kategori/tumu"
+                className="flex items-center gap-1 text-green-600 font-semibold text-sm hover:text-green-700 transition-colors"
+              >
+                Tümünü Gör
+                <svg viewBox="0 0 24 24" className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M9 18l6-6-6-6"/>
+                </svg>
+              </Link>
+            </div>
+            
+            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+              {products.slice(0, 24).map((product) => (
+                <ProductCard key={product.id} product={product} />
+              ))}
+            </div>
+          </div>
+        </section>
       </div>
     </div>
   );
