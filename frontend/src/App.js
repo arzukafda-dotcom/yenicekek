@@ -149,7 +149,7 @@ const MainHeader = ({ onMenuToggle }) => {
   );
 };
 
-// ===== CATEGORY NAV BAR =====
+// ===== CATEGORY NAV BAR (Desktop Only) =====
 const CategoryNavBar = ({ categories }) => {
   const mainCategories = [
     { name: "ÇİÇEKLER", slug: "tumu", icon: "🌸" },
@@ -160,9 +160,9 @@ const CategoryNavBar = ({ categories }) => {
   ];
 
   return (
-    <div className="bg-green-500 text-white">
+    <div className="hidden md:block bg-green-500 text-white">
       <div className="w-full px-4">
-        <nav className="flex items-center justify-center gap-2 py-3">
+        <nav className="flex items-center gap-2 py-3">
           {mainCategories.map((cat) => (
             <Link
               key={cat.slug}
