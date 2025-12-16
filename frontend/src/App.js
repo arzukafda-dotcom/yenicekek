@@ -761,7 +761,7 @@ function App() {
               <path d="M16 28l-1.8-1.6C6.4 19.2 2 15.2 2 10.4 2 6.4 5.2 3.2 9.2 3.2c2.2 0 4.4 1 5.8 2.6L16 7l1-1.2C18.4 4.2 20.6 3.2 22.8 3.2 26.8 3.2 30 6.4 30 10.4c0 4.8-4.4 8.8-12.2 16L16 28z"/>
             </svg>
           </div>
-          <div className="text-lg text-gray-600">Yükleniyor...</div>
+          <div className="text-lg text-gray-600">Çiçekçi Burada yükleniyor...</div>
         </div>
       </div>
     );
