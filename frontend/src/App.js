@@ -217,35 +217,33 @@ const CircularCategories = ({ categories }) => {
 // ===== HERO SLIDER =====
 const HeroSlider = ({ banners }) => {
   return (
-    <div className="bg-white py-4">
-      <div className="max-w-7xl mx-auto px-4">
-        <div className="grid md:grid-cols-2 gap-4">
-          {/* Left Banner - Kokina */}
-          <Link
-            to="/kategori/tasarim"
-            className="relative rounded-lg overflow-hidden h-72 md:h-96 group"
-            data-testid="hero-banner-0"
-          >
-            <img 
-              src="https://customer-assets.emergentagent.com/job_html-spa-converter/artifacts/k4xtaij1_hero.png"
-              alt="Kokina - Yeni Yılın Gözdesi"
-              className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-            />
-          </Link>
+    <div className="bg-white">
+      <div className="grid md:grid-cols-2 gap-1">
+        {/* Left Banner - Kokina */}
+        <Link
+          to="/kategori/tasarim"
+          className="relative overflow-hidden h-80 md:h-[420px] group"
+          data-testid="hero-banner-0"
+        >
+          <img 
+            src="https://customer-assets.emergentagent.com/job_html-spa-converter/artifacts/k4xtaij1_hero.png"
+            alt="Kokina - Yeni Yılın Gözdesi"
+            className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
+          />
+        </Link>
 
-          {/* Right Banner - Kırmızı Güller */}
-          <Link
-            to="/kategori/gul"
-            className="relative rounded-lg overflow-hidden h-72 md:h-96 group"
-            data-testid="hero-banner-1"
-          >
-            <img 
-              src="https://customer-assets.emergentagent.com/job_html-spa-converter/artifacts/o8av0npy_kirmizi-gul.png"
-              alt="Kırmızı Güller"
-              className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-            />
-          </Link>
-        </div>
+        {/* Right Banner - Kırmızı Güller */}
+        <Link
+          to="/kategori/gul"
+          className="relative overflow-hidden h-80 md:h-[420px] group"
+          data-testid="hero-banner-1"
+        >
+          <img 
+            src="https://customer-assets.emergentagent.com/job_html-spa-converter/artifacts/o8av0npy_kirmizi-gul.png"
+            alt="Kırmızı Güller"
+            className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
+          />
+        </Link>
       </div>
     </div>
   );
