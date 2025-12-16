@@ -1112,7 +1112,7 @@ function App() {
           <Routes>
             <Route path="/" element={<HomePage products={products} banners={banners} categories={categories} />} />
             <Route path="/kategori/:slug" element={<CategoryPage products={products} categories={categories} />} />
-            <Route path="/urun/:id" element={<ProductDetailPage products={products} />} />
+            <Route path="/urun/:id" element={<ProductDetailPage products={products} categories={categories} />} />
             <Route path="/ara" element={<SearchResultsPage products={products} />} />
             <Route path="/hakkimizda" element={<AboutPage />} />
           </Routes>
