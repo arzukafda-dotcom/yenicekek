@@ -54,10 +54,32 @@ const categoryIcons = {
   "premium": "⭐",
 };
 
-// ===== TOP HEADER (Removed as per request) =====
+// ===== HAMBURGER ICON =====
+const HamburgerIcon = () => (
+  <div className="flex flex-col gap-1.5">
+    <span className="w-6 h-0.5 bg-white rounded"></span>
+    <span className="w-6 h-0.5 bg-white rounded"></span>
+    <span className="w-6 h-0.5 bg-white rounded"></span>
+  </div>
+);
+
+// ===== MOBILE LOGO (White hearts for green header) =====
+const MobileLogo = () => (
+  <Link to="/" className="flex items-center gap-1" data-testid="mobile-logo-link">
+    <div className="flex">
+      <svg viewBox="0 0 32 32" className="w-6 h-6 text-white fill-current">
+        <path d="M16 28l-1.8-1.6C6.4 19.2 2 15.2 2 10.4 2 6.4 5.2 3.2 9.2 3.2c2.2 0 4.4 1 5.8 2.6L16 7l1-1.2C18.4 4.2 20.6 3.2 22.8 3.2 26.8 3.2 30 6.4 30 10.4c0 4.8-4.4 8.8-12.2 16L16 28z"/>
+      </svg>
+      <svg viewBox="0 0 32 32" className="w-6 h-6 text-white fill-current -ml-1">
+        <path d="M16 28l-1.8-1.6C6.4 19.2 2 15.2 2 10.4 2 6.4 5.2 3.2 9.2 3.2c2.2 0 4.4 1 5.8 2.6L16 7l1-1.2C18.4 4.2 20.6 3.2 22.8 3.2 26.8 3.2 30 6.4 30 10.4c0 4.8-4.4 8.8-12.2 16L16 28z"/>
+      </svg>
+    </div>
+    <span className="text-lg font-bold text-white">çiçekçiBurada</span>
+  </Link>
+);
 
 // ===== MAIN HEADER =====
-const MainHeader = ({ onSearch }) => {
+const MainHeader = ({ onMenuToggle }) => {
   const [query, setQuery] = useState("");
   const navigate = useNavigate();
 
@@ -70,35 +92,60 @@ const MainHeader = ({ onSearch }) => {
   };
 
   return (
-    <div className="bg-white border-b border-gray-200">
-      <div className="w-full px-4 py-3 flex items-center justify-between gap-6">
-        <Logo />
-        
-        <form onSubmit={handleSearch} className="flex-1 max-w-xl">
-          <div className="flex border border-gray-300 rounded-md overflow-hidden">
-            <input
-              type="text"
-              placeholder="Ürün veya kategori ara"
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              className="flex-1 px-4 py-2.5 border-0 focus:outline-none text-gray-700 text-sm"
-              data-testid="header-search-input"
-            />
-            <button 
-              type="submit"
-              className="bg-gray-100 hover:bg-gray-200 px-4 border-l border-gray-300 transition-colors"
-              data-testid="header-search-btn"
-            >
-              <SearchIcon className="w-5 h-5 text-gray-500" />
-            </button>
-          </div>
-        </form>
-        
-        <div className="flex items-center">
-          {/* Empty space */}
+    <>
+      {/* Desktop Header */}
+      <div className="hidden md:block bg-white border-b border-gray-200">
+        <div className="w-full px-4 py-3 flex items-center gap-6">
+          <Logo />
+          
+          <form onSubmit={handleSearch} className="flex-1">
+            <div className="flex border border-gray-300 rounded-md overflow-hidden">
+              <input
+                type="text"
+                placeholder="Ürün veya kategori ara"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                className="flex-1 px-4 py-2.5 border-0 focus:outline-none text-gray-700 text-sm"
+                data-testid="header-search-input"
+              />
+              <button 
+                type="submit"
+                className="bg-gray-100 hover:bg-gray-200 px-4 border-l border-gray-300 transition-colors"
+                data-testid="header-search-btn"
+              >
+                <SearchIcon className="w-5 h-5 text-gray-500" />
+              </button>
+            </div>
+          </form>
         </div>
       </div>
-    </div>
+
+      {/* Mobile Header - Green Bar */}
+      <div className="md:hidden bg-green-500">
+        <div className="flex items-center justify-between px-4 py-3">
+          <button 
+            onClick={onMenuToggle}
+            className="p-2"
+            data-testid="mobile-menu-btn"
+          >
+            <HamburgerIcon />
+          </button>
+          
+          <MobileLogo />
+          
+          <div className="flex items-center gap-2">
+            <button className="p-2 text-white" data-testid="mobile-heart-btn">
+              <svg viewBox="0 0 24 24" className="w-6 h-6 fill-current">
+                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+              </svg>
+            </button>
+            <button className="p-2 text-white" data-testid="mobile-search-btn">
+              <SearchIcon className="w-6 h-6" />
+            </button>
+          </div>
+        </div>
+      </div>
+    </>
   );
 };
 
