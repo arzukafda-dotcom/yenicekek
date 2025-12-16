@@ -114,7 +114,7 @@ const CategoryNavBar = ({ categories }) => {
 
   return (
     <div className="bg-green-500 text-white">
-      <div className="max-w-7xl mx-auto px-4">
+      <div className="w-full px-4">
         <nav className="flex items-center justify-center gap-2 py-3">
           {mainCategories.map((cat) => (
             <Link
