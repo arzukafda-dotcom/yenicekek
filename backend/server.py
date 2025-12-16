@@ -209,6 +209,94 @@ async def search_products(q: str = Query(..., min_length=2)):
     return products
 
 
+# ===== LOCATION SEARCH (Gönderim Yeri) =====
+@api_router.get("/locations/search")
+async def search_locations(q: str = Query(..., min_length=1, description="Aranacak konum")):
+    """
+    Türkiye'deki konumları ara (Photon + Nominatim fallback)
+    """
+    headers = {
+        "User-Agent": "cicekci-burada-app/1.0 (contact@cicekciburada.com)"
+    }
+    
+    async with httpx.AsyncClient(timeout=10.0) as client:
+        # 1) Photon API (hızlı + TR destekli)
+        try:
+            photon_url = f"https://photon.komoot.io/api/?q={q}&lang=tr&limit=8"
+            response = await client.get(photon_url, headers=headers)
+            
+            if response.status_code == 200:
+                data = response.json()
+                if data.get("features"):
+                    # Photon sonuçlarını dönüştür
+                    results = []
+                    for feature in data["features"]:
+                        props = feature.get("properties", {})
+                        coords = feature.get("geometry", {}).get("coordinates", [])
+                        
+                        # Adres parçalarını birleştir
+                        parts = []
+                        if props.get("name"):
+                            parts.append(props["name"])
+                        if props.get("street"):
+                            parts.append(props["street"])
+                        if props.get("district"):
+                            parts.append(props["district"])
+                        if props.get("city"):
+                            parts.append(props["city"])
+                        if props.get("state"):
+                            parts.append(props["state"])
+                        
+                        # Sadece Türkiye sonuçlarını al
+                        country = props.get("country", "")
+                        if country.lower() in ["türkiye", "turkey", "tr", ""]:
+                            results.append({
+                                "display_name": ", ".join(parts) if parts else props.get("name", "Bilinmeyen Konum"),
+                                "name": props.get("name", ""),
+                                "city": props.get("city", props.get("state", "")),
+                                "district": props.get("district", ""),
+                                "street": props.get("street", ""),
+                                "lat": coords[1] if len(coords) > 1 else None,
+                                "lon": coords[0] if len(coords) > 0 else None,
+                                "type": props.get("osm_value", props.get("type", ""))
+                            })
+                    
+                    if results:
+                        return {"engine": "photon", "results": results}
+        except Exception as e:
+            logger.warning(f"Photon API hatası: {e}")
+        
+        # 2) Nominatim Fallback
+        try:
+            nominatim_url = f"https://nominatim.openstreetmap.org/search?format=jsonv2&addressdetails=1&limit=8&countrycodes=tr&q={q}"
+            response = await client.get(nominatim_url, headers=headers)
+            
+            if response.status_code == 200:
+                data = response.json()
+                if data:
+                    results = []
+                    for item in data:
+                        address = item.get("address", {})
+                        results.append({
+                            "display_name": item.get("display_name", ""),
+                            "name": item.get("name", address.get("neighbourhood", "")),
+                            "city": address.get("city", address.get("town", address.get("province", ""))),
+                            "district": address.get("district", address.get("suburb", "")),
+                            "street": address.get("road", ""),
+                            "lat": float(item.get("lat", 0)),
+                            "lon": float(item.get("lon", 0)),
+                            "type": item.get("type", "")
+                        })
+                    
+                    if results:
+                        return {"engine": "nominatim", "results": results}
+        except Exception as e:
+            logger.warning(f"Nominatim API hatası: {e}")
+    
+    # Hiçbiri çalışmazsa
+    raise HTTPException(status_code=502, detail="Konum servisi şu anda kullanılamıyor")
+
+
 # ===== IMPORT ENDPOINTS =====
 
 # Kategori slug mapping (scraper format -> site format)
