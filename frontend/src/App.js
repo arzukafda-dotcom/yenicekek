@@ -146,10 +146,11 @@ const MainHeader = ({ onMenuToggle }) => {
 const CategoryNavBar = ({ categories }) => {
   const mainCategories = [
     { name: "ÇİÇEKLER", slug: "tumu", icon: "🌸" },
-    { name: "DOĞUM GÜNÜ", slug: "dogum-gunu", icon: "🎂" },
-    { name: "SEVGİ & AŞK", slug: "gul", icon: "❤️" },
-    { name: "PREMİUM ÇİÇEKLER", slug: "orkide", icon: "⭐" },
-    { name: "TASARIM", slug: "tasarim", icon: "💐" },
+    { name: "ORKİDE", slug: "orkide", icon: "🌸" },
+    { name: "GÜL", slug: "gul", icon: "🌹" },
+    { name: "TASARIM", slug: "tasarim", icon: "🎨" },
+    { name: "KOKİNA", slug: "kokina", icon: "🎄" },
+    { name: "ANTORYUM", slug: "antoryum", icon: "❤️" },
   ];
 
   return (
