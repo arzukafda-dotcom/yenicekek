@@ -1053,30 +1053,56 @@ const ProductDetailPage = ({ categories }) => {
 
           {/* Summary */}
           <div className="bg-white rounded-xl p-6 shadow-sm">
-            {/* Location Input */}
+            {/* Location Input - CicekSepeti Style */}
             <div className="mb-6">
-              <label className="block text-sm font-semibold text-gray-700 mb-2">📍 Gönderim Yeri</label>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">Gönderim Yeri</label>
               <div className="relative">
+                <div className="absolute left-4 top-1/2 -translate-y-1/2 text-red-500">
+                  <svg viewBox="0 0 24 24" className="w-5 h-5" fill="currentColor">
+                    <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                  </svg>
+                </div>
                 <input
                   type="text"
                   value={location}
                   onChange={(e) => { setLocation(e.target.value); setShowLocationDropdown(true); }}
                   onFocus={() => setShowLocationDropdown(true)}
-                  placeholder="Gönderim yeri yazın (ör. Bağlar Mah)"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-green-500"
+                  onBlur={() => setTimeout(() => setShowLocationDropdown(false), 200)}
+                  placeholder="Gönderim yeri yazın"
+                  className="w-full pl-12 pr-4 py-4 border-2 border-red-400 rounded-lg focus:outline-none focus:border-red-500 text-gray-800"
                   data-testid="location-input"
                 />
-                {showLocationDropdown && filteredLocations.length > 0 && (
-                  <div className="absolute top-full left-0 right-0 bg-white border border-gray-200 rounded-lg shadow-lg mt-1 z-10 max-h-64 overflow-auto">
-                    {filteredLocations.map((loc, idx) => (
-                      <button
-                        key={idx}
-                        onClick={() => { setLocation(loc); setShowLocationDropdown(false); }}
-                        className="w-full text-left px-4 py-3 hover:bg-green-50 border-b border-gray-100 last:border-0 text-gray-700"
-                      >
-                        📍 {loc}
-                      </button>
-                    ))}
+                {showLocationDropdown && (location.length >= 2) && (
+                  <div className="absolute top-full left-0 right-0 bg-white border border-gray-200 rounded-lg shadow-xl mt-1 z-20 max-h-72 overflow-auto">
+                    {locationLoading ? (
+                      <div className="px-4 py-4 text-gray-500 text-center">
+                        <span className="inline-block animate-spin mr-2">⏳</span>
+                        Aranıyor...
+                      </div>
+                    ) : filteredLocations.length > 0 ? (
+                      filteredLocations.map((loc, idx) => (
+                        <button
+                          key={idx}
+                          onClick={() => { 
+                            setLocation(loc.display_name || loc.name); 
+                            setShowLocationDropdown(false);
+                            setLocationResults([]);
+                          }}
+                          className="w-full flex items-center justify-between px-4 py-4 hover:bg-gray-50 border-b border-gray-100 last:border-0 text-left"
+                        >
+                          <span className="text-gray-800">
+                            {loc.display_name || `${loc.name}, ${loc.city}, Türkiye`}
+                          </span>
+                          <svg viewBox="0 0 24 24" className="w-5 h-5 text-gray-400 flex-shrink-0 ml-2" fill="none" stroke="currentColor" strokeWidth="2">
+                            <path d="M9 18l6-6-6-6"/>
+                          </svg>
+                        </button>
+                      ))
+                    ) : (
+                      <div className="px-4 py-4 text-gray-500 text-center">
+                        Sonuç bulunamadı
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
