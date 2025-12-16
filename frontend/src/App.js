@@ -1125,37 +1125,25 @@ const ProductDetailPage = ({ categories }) => {
                   className="w-full pl-12 pr-4 py-4 border-2 border-red-400 rounded-lg focus:outline-none focus:border-red-500 text-gray-800"
                   data-testid="location-input"
                 />
-                {showLocationDropdown && (location.length >= 2) && (
+                {showLocationDropdown && filteredLocations.length > 0 && (
                   <div className="absolute top-full left-0 right-0 bg-white border border-gray-200 rounded-lg shadow-xl mt-1 z-20 max-h-72 overflow-auto">
-                    {locationLoading ? (
-                      <div className="px-4 py-4 text-gray-500 text-center">
-                        <span className="inline-block animate-spin mr-2">⏳</span>
-                        Aranıyor...
-                      </div>
-                    ) : filteredLocations.length > 0 ? (
-                      filteredLocations.map((loc, idx) => (
-                        <button
-                          key={idx}
-                          onClick={() => { 
-                            setLocation(loc.display_name || loc.name); 
-                            setShowLocationDropdown(false);
-                            setLocationResults([]);
-                          }}
-                          className="w-full flex items-center justify-between px-4 py-4 hover:bg-gray-50 border-b border-gray-100 last:border-0 text-left"
-                        >
-                          <span className="text-gray-800">
-                            {loc.display_name || `${loc.name}, ${loc.city}, Türkiye`}
-                          </span>
-                          <svg viewBox="0 0 24 24" className="w-5 h-5 text-gray-400 flex-shrink-0 ml-2" fill="none" stroke="currentColor" strokeWidth="2">
-                            <path d="M9 18l6-6-6-6"/>
-                          </svg>
-                        </button>
-                      ))
-                    ) : (
-                      <div className="px-4 py-4 text-gray-500 text-center">
-                        Sonuç bulunamadı
-                      </div>
-                    )}
+                    {filteredLocations.map((loc, idx) => (
+                      <button
+                        key={idx}
+                        onClick={() => { 
+                          setLocation(`${loc.name}, ${loc.district}/${loc.city}, Türkiye`); 
+                          setShowLocationDropdown(false);
+                        }}
+                        className="w-full flex items-center justify-between px-4 py-4 hover:bg-gray-50 border-b border-gray-100 last:border-0 text-left"
+                      >
+                        <span className="text-gray-800">
+                          {loc.name}, {loc.district}/{loc.city}, Türkiye
+                        </span>
+                        <svg viewBox="0 0 24 24" className="w-5 h-5 text-gray-400 flex-shrink-0 ml-2" fill="none" stroke="currentColor" strokeWidth="2">
+                          <path d="M9 18l6-6-6-6"/>
+                        </svg>
+                      </button>
+                    ))}
                   </div>
                 )}
               </div>
