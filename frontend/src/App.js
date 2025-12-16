@@ -71,10 +71,10 @@ const MainHeader = ({ onSearch }) => {
 
   return (
     <div className="bg-white border-b border-gray-200">
-      <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between gap-6">
+      <div className="w-full px-4 py-3 flex items-center justify-between gap-6">
         <Logo />
         
-        <form onSubmit={handleSearch} className="flex-1 max-w-lg">
+        <form onSubmit={handleSearch} className="flex-1 max-w-xl">
           <div className="flex border border-gray-300 rounded-md overflow-hidden">
             <input
               type="text"
@@ -95,7 +95,7 @@ const MainHeader = ({ onSearch }) => {
         </form>
         
         <div className="flex items-center">
-          {/* Empty space - no login/register buttons */}
+          {/* Empty space */}
         </div>
       </div>
     </div>
