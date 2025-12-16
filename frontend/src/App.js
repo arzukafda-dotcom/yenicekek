@@ -758,13 +758,43 @@ const HomePage = ({ banners, categories }) => {
 };
 
 // ===== CATEGORY PAGE =====
-const CategoryPage = ({ products, categories }) => {
+const CategoryPage = ({ categories }) => {
   const { slug } = useParams();
   const category = categories.find(c => c.slug === slug);
   
-  const filteredProducts = slug === 'tumu' 
-    ? products 
-    : products.filter(p => p.category === slug);
+  const [products, setProducts] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalProducts, setTotalProducts] = useState(0);
+  const [loading, setLoading] = useState(true);
+
+  const fetchProducts = useCallback(async (page) => {
+    try {
+      setLoading(true);
+      const categoryParam = slug === 'tumu' ? '' : `&category=${slug}`;
+      const res = await axios.get(`${API}/products?page=${page}&per_page=24${categoryParam}`);
+      setProducts(res.data.products);
+      setTotalPages(res.data.total_pages);
+      setTotalProducts(res.data.total);
+      setCurrentPage(res.data.page);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } catch (e) {
+      console.error('Error fetching products:', e);
+    } finally {
+      setLoading(false);
+    }
+  }, [slug]);
+
+  useEffect(() => {
+    setCurrentPage(1);
+    fetchProducts(1);
+  }, [slug, fetchProducts]);
+
+  const handlePageChange = (page) => {
+    if (page >= 1 && page <= totalPages) {
+      fetchProducts(page);
+    }
+  };
 
   return (
     <div className="bg-gray-50 min-h-screen" data-testid="category-page">
@@ -776,20 +806,40 @@ const CategoryPage = ({ products, categories }) => {
           {category?.description && (
             <p className="text-gray-500 mt-1">{category.description}</p>
           )}
-          <p className="text-sm text-gray-400 mt-2">{filteredProducts.length} ürün bulundu</p>
+          <p className="text-sm text-gray-400 mt-2">{totalProducts} ürün bulundu • Sayfa {currentPage}/{totalPages}</p>
         </div>
         
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
-          {filteredProducts.map((product) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
-        </div>
+        {loading ? (
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+            {[...Array(24)].map((_, i) => (
+              <div key={i} className="bg-white rounded-xl border border-gray-100 shadow-sm animate-pulse">
+                <div className="aspect-square bg-gray-200"></div>
+                <div className="p-4">
+                  <div className="h-4 bg-gray-200 rounded mb-2"></div>
+                  <div className="h-6 bg-gray-200 rounded w-1/2"></div>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+            {products.map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
+          </div>
+        )}
         
-        {filteredProducts.length === 0 && (
+        {!loading && products.length === 0 && (
           <div className="text-center py-12 text-gray-500">
             Bu kategoride henüz ürün bulunmuyor.
           </div>
         )}
+        
+        <Pagination 
+          currentPage={currentPage} 
+          totalPages={totalPages} 
+          onPageChange={handlePageChange} 
+        />
       </div>
     </div>
   );
