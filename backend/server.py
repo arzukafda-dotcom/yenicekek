@@ -208,6 +208,177 @@ async def search_products(q: str = Query(..., min_length=2)):
     return products
 
 
+# ===== IMPORT ENDPOINTS =====
+
+# Kategori slug mapping (scraper format -> site format)
+CATEGORY_MAPPING = {
+    "Kokina": "kokina",
+    "Dogum_Gunu_Cicekleri": "dogum-gunu",
+    "Sevgiliye_Cicek": "sevgi-ask",
+    "Cicek_Buketleri": "cicek-buketleri",
+    "Saksi_Cicekleri": "saksi-cicekleri",
+    "Yeni_Ise_Cicek": "yeni-is-terfi",
+    "Orkide": "orkide",
+    "Gecmis_Olsun_Cicekleri": "gecmis-olsun",
+    "Gul": "gul",
+    "Acilis_Toren_Cicekleri": "acilis-kutlama",
+    "Yeni_Bebek_Cicekleri": "dogum-yeni-bebek",
+    "Aycicegi": "aycicegi",
+    "Papatya_Gerbera": "papatya-gerbera",
+    "Antoryum": "antoryum",
+    "Husnuyusuf": "husnuyusuf",
+    "Tasarim_Cicekler": "tasarim",
+    "Kirmizi_Gul": "kirmizi-gul",
+    "Beyaz_Gul": "beyaz-gul",
+    "Nikah_Dugun_Cicekleri": "nikah-dugun",
+}
+
+class ImportProductItem(BaseModel):
+    product_code: str = ""
+    name: str
+    price: str
+    url: str = ""
+    category: str = ""
+    folder: str = ""
+    local_images: List[str] = []
+    all_images: List[str] = []
+    contents: List[str] = []
+    description: str = ""
+
+class ImportRequest(BaseModel):
+    products: List[ImportProductItem]
+    category_name: str = ""  # Opsiyonel - JSON dosya adından kategori
+
+
+@api_router.post("/import/products")
+async def import_products(data: ImportRequest):
+    """
+    Scraper'dan gelen JSON formatında ürünleri içe aktar.
+    """
+    imported = 0
+    skipped = 0
+    errors = []
+    
+    for item in data.products:
+        try:
+            # Kategori belirle
+            category_slug = ""
+            if item.category:
+                category_slug = CATEGORY_MAPPING.get(item.category, item.category.lower().replace("_", "-"))
+            elif data.category_name:
+                category_slug = CATEGORY_MAPPING.get(data.category_name, data.category_name.lower().replace("_", "-"))
+            
+            # Fiyat parse et (örn: "599,00 TL" -> 599)
+            price_str = item.price.replace("TL", "").replace(",00", "").replace(".", "").strip()
+            try:
+                price = int(price_str)
+            except:
+                price = 0
+            
+            # Görsel URL seç (ilk görseli kullan)
+            image_url = ""
+            if item.all_images:
+                image_url = item.all_images[0]
+            elif item.local_images:
+                # Local image path'i URL'e çevir (gerekirse)
+                image_url = f"/images/{item.local_images[0]}"
+            
+            # Badge belirle
+            badges = ["Aynı Gün Teslimat", "Hızlı Teslimat", "Özel Fiyat", "Yeni"]
+            import random
+            badge = random.choice(badges)
+            
+            # Ürün oluştur
+            product_doc = {
+                "id": str(uuid.uuid4()),
+                "title": item.name,
+                "description": item.description or f"{item.name} - Özenle hazırlanmış taze çiçekler",
+                "price": price,
+                "category": category_slug,
+                "image": image_url,
+                "badge": badge,
+                "is_bestseller": random.random() < 0.15,  # %15 bestseller
+                "product_code": item.product_code,
+                "source_url": item.url,
+                "all_images": item.all_images,
+                "contents": item.contents,
+                "created_at": datetime.now(timezone.utc).isoformat()
+            }
+            
+            # Veritabanına ekle
+            await db.products.insert_one(product_doc)
+            imported += 1
+            
+        except Exception as e:
+            errors.append({"name": item.name, "error": str(e)})
+            skipped += 1
+    
+    return {
+        "message": "İçe aktarma tamamlandı",
+        "imported": imported,
+        "skipped": skipped,
+        "errors": errors[:10]  # İlk 10 hata
+    }
+
+
+@api_router.post("/import/json-file")
+async def import_json_file(file: UploadFile = File(...)):
+    """
+    JSON dosyası yükleyerek ürünleri içe aktar.
+    Dosya adı kategori adı olarak kullanılır (örn: kokina_urunler.json)
+    """
+    try:
+        content = await file.read()
+        products_data = json.loads(content.decode('utf-8'))
+        
+        # Dosya adından kategori çıkar
+        filename = file.filename or ""
+        category_name = filename.replace("_urunler.json", "").replace(".json", "")
+        
+        # ImportRequest oluştur
+        import_data = ImportRequest(
+            products=[ImportProductItem(**p) for p in products_data],
+            category_name=category_name
+        )
+        
+        # Import işlemini çağır
+        result = await import_products(import_data)
+        result["filename"] = filename
+        result["category"] = category_name
+        
+        return result
+        
+    except json.JSONDecodeError:
+        raise HTTPException(status_code=400, detail="Geçersiz JSON formatı")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"İçe aktarma hatası: {str(e)}")
+
+
+@api_router.delete("/products/clear")
+async def clear_all_products():
+    """Tüm ürünleri sil (yeni import öncesi kullanılabilir)"""
+    result = await db.products.delete_many({})
+    return {"message": "Tüm ürünler silindi", "deleted_count": result.deleted_count}
+
+
+@api_router.get("/import/stats")
+async def get_import_stats():
+    """Mevcut veritabanı istatistikleri"""
+    total_products = await db.products.count_documents({})
+    
+    # Kategorilere göre ürün sayıları
+    pipeline = [
+        {"$group": {"_id": "$category", "count": {"$sum": 1}}},
+        {"$sort": {"count": -1}}
+    ]
+    category_stats = await db.products.aggregate(pipeline).to_list(100)
+    
+    return {
+        "total_products": total_products,
+        "categories": category_stats
+    }
+
+
 # Seed Data Route (for initial setup)
 @api_router.post("/seed")
 async def seed_database():
