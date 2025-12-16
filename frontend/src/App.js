@@ -576,8 +576,133 @@ const BackToTop = () => {
   );
 };
 
+// ===== PAGINATION COMPONENT =====
+const Pagination = ({ currentPage, totalPages, onPageChange }) => {
+  const getVisiblePages = () => {
+    const pages = [];
+    const delta = 2; // Pages to show before/after current
+    
+    // Always show first page
+    pages.push(1);
+    
+    // Calculate range around current page
+    let start = Math.max(2, currentPage - delta);
+    let end = Math.min(totalPages - 1, currentPage + delta);
+    
+    // Add ellipsis if needed before range
+    if (start > 2) pages.push('...');
+    
+    // Add pages in range
+    for (let i = start; i <= end; i++) {
+      pages.push(i);
+    }
+    
+    // Add ellipsis if needed after range
+    if (end < totalPages - 1) pages.push('...');
+    
+    // Always show last page if more than 1 page
+    if (totalPages > 1) pages.push(totalPages);
+    
+    return pages;
+  };
+
+  if (totalPages <= 1) return null;
+
+  return (
+    <div className="flex items-center justify-center gap-2 mt-8" data-testid="pagination">
+      {/* Previous button */}
+      <button
+        onClick={() => onPageChange(currentPage - 1)}
+        disabled={currentPage === 1}
+        className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+          currentPage === 1
+            ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+            : 'bg-white border border-gray-300 text-gray-700 hover:bg-green-50 hover:border-green-500'
+        }`}
+        data-testid="prev-page-btn"
+      >
+        ← Önceki
+      </button>
+
+      {/* Page numbers */}
+      <div className="hidden sm:flex items-center gap-1">
+        {getVisiblePages().map((page, idx) => (
+          page === '...' ? (
+            <span key={`ellipsis-${idx}`} className="px-3 py-2 text-gray-500">...</span>
+          ) : (
+            <button
+              key={page}
+              onClick={() => onPageChange(page)}
+              className={`w-10 h-10 rounded-lg font-medium transition-colors ${
+                currentPage === page
+                  ? 'bg-green-500 text-white'
+                  : 'bg-white border border-gray-300 text-gray-700 hover:bg-green-50 hover:border-green-500'
+              }`}
+              data-testid={`page-btn-${page}`}
+            >
+              {page}
+            </button>
+          )
+        ))}
+      </div>
+
+      {/* Mobile: Page indicator */}
+      <div className="sm:hidden px-4 py-2 text-gray-600 font-medium">
+        Sayfa {currentPage} / {totalPages}
+      </div>
+
+      {/* Next button */}
+      <button
+        onClick={() => onPageChange(currentPage + 1)}
+        disabled={currentPage === totalPages}
+        className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+          currentPage === totalPages
+            ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+            : 'bg-white border border-gray-300 text-gray-700 hover:bg-green-50 hover:border-green-500'
+        }`}
+        data-testid="next-page-btn"
+      >
+        Sonraki →
+      </button>
+    </div>
+  );
+};
+
 // ===== HOME PAGE =====
-const HomePage = ({ products, banners, categories }) => {
+const HomePage = ({ banners, categories }) => {
+  const [products, setProducts] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalProducts, setTotalProducts] = useState(0);
+  const [loading, setLoading] = useState(true);
+
+  const fetchProducts = useCallback(async (page) => {
+    try {
+      setLoading(true);
+      const res = await axios.get(`${API}/products?page=${page}&per_page=24`);
+      setProducts(res.data.products);
+      setTotalPages(res.data.total_pages);
+      setTotalProducts(res.data.total);
+      setCurrentPage(res.data.page);
+      // Scroll to top of products section
+      window.scrollTo({ top: 400, behavior: 'smooth' });
+    } catch (e) {
+      console.error('Error fetching products:', e);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchProducts(1);
+  }, [fetchProducts]);
+
+  const handlePageChange = (page) => {
+    if (page >= 1 && page <= totalPages) {
+      fetchProducts(page);
+    }
+  };
+
   return (
     <div data-testid="home-page">
       <CircularCategories categories={categories} />
@@ -590,30 +715,41 @@ const HomePage = ({ products, banners, categories }) => {
           </div>
         </div>
         
-        {/* Tüm Çiçekler - Grid */}
+        {/* Tüm Çiçekler - Grid with Pagination */}
         <section className="py-6" data-testid="section-tum-cicekler">
           <div className="w-full px-4">
             <div className="flex items-center justify-between mb-6">
               <div>
                 <h2 className="text-xl md:text-2xl font-bold text-gray-900">Tüm Çiçekler</h2>
-                <p className="text-gray-500 text-sm mt-1">{products.length} ürün</p>
+                <p className="text-gray-500 text-sm mt-1">{totalProducts} ürün • Sayfa {currentPage}/{totalPages}</p>
               </div>
-              <Link 
-                to="/kategori/tumu"
-                className="flex items-center gap-1 text-green-600 font-semibold text-sm hover:text-green-700 transition-colors"
-              >
-                Tümünü Gör
-                <svg viewBox="0 0 24 24" className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2">
-                  <path d="M9 18l6-6-6-6"/>
-                </svg>
-              </Link>
             </div>
             
-            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
-              {products.slice(0, 24).map((product) => (
-                <ProductCard key={product.id} product={product} />
-              ))}
-            </div>
+            {loading ? (
+              <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+                {[...Array(24)].map((_, i) => (
+                  <div key={i} className="bg-white rounded-xl border border-gray-100 shadow-sm animate-pulse">
+                    <div className="aspect-square bg-gray-200"></div>
+                    <div className="p-4">
+                      <div className="h-4 bg-gray-200 rounded mb-2"></div>
+                      <div className="h-6 bg-gray-200 rounded w-1/2"></div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+                {products.map((product) => (
+                  <ProductCard key={product.id} product={product} />
+                ))}
+              </div>
+            )}
+            
+            <Pagination 
+              currentPage={currentPage} 
+              totalPages={totalPages} 
+              onPageChange={handlePageChange} 
+            />
           </div>
         </section>
       </div>
